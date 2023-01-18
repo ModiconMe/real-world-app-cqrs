@@ -12,6 +12,4 @@ public interface DataUserRepository extends CrudRepository<UserEntity, UUID> {
 
     Optional<UserEntity> findByUsername(String username);
 
-    Optional<UserEntity> findByEmailAndPassword(String email, String password);
-
 }

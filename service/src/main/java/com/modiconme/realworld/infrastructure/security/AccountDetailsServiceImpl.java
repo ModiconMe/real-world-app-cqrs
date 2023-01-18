@@ -18,7 +18,6 @@ public class AccountDetailsServiceImpl implements UserDetailsService {
         return userRepository.findByEmail(username)
                 .map(user ->
                         AppUserDetails.builder()
-                                .id(user.getId())
                                 .email(user.getEmail())
                                 .password(user.getPassword())
                                 .build())

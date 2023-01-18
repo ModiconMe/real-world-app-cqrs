@@ -32,8 +32,13 @@ dependencies {
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
 
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+
+    testImplementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.0'
+    testImplementation 'io.github.openfeign:feign-jackson:12.1'
 }
 
 test {

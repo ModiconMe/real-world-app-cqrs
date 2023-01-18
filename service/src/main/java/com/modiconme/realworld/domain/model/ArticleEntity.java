@@ -17,6 +17,10 @@ import java.util.UUID;
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(name = "article_slug_unique", columnNames = "slug")
+        },
+        indexes = {
+                @Index(name = "slug_index", columnList = "slug"),
+                @Index(name = "author_index", columnList = "author_id")
         }
 )
 public class ArticleEntity {

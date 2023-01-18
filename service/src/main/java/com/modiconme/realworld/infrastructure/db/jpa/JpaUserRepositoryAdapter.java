@@ -24,12 +24,8 @@ public class JpaUserRepositoryAdapter implements UserRepository {
     }
 
     @Override
-    public Optional<UserEntity> findByEmailAndPassword(String email, String password) {
-        return repository.findByEmailAndPassword(email, password);
-    }
-
-    @Override
     public UserEntity save(UserEntity user) {
         return repository.save(user);
     }
+    
 }

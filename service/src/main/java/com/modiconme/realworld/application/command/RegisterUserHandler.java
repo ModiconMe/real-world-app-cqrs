@@ -8,15 +8,19 @@ import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.UserRepository;
 import com.modiconme.realworld.infrastructure.security.AppUserDetails;
 import com.modiconme.realworld.infrastructure.security.jwt.JwtUtils;
-import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,35 +29,39 @@ public class RegisterUserHandler implements CommandHandler<RegisterUserResult, R
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
     @Override
-    public RegisterUserResult handle(RegisterUser command) {
+    @Transactional
+    public RegisterUserResult handle(RegisterUser cmd) {
         // check username duplicate
-        String username = command.getUsername();
-        if (userRepository.findByUsername(username).isPresent()) {
-            ApiException e = ApiException.exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with username [%s] is already exists", username);
-            log.error(e.getMessage());
-            throw e;
-        }
+        String username = cmd.getUsername();
+        if (userRepository.findByUsername(username).isPresent())
+            throw exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with username [%s] is already exists", username);
 
         // check email duplicate
-        String email = command.getEmail();
-        if (userRepository.findByEmail(email).isPresent()) {
-            ApiException e = ApiException.exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with email [%s] is already exists", email);
-            log.error(e.getMessage());
-            throw e;
-        }
+        String email = cmd.getEmail();
+        if (userRepository.findByEmail(email).isPresent())
+            throw exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with email [%s] is already exists", email);
 
         // create user
         UserEntity user = UserEntity.builder()
                 .id(UUID.randomUUID())
                 .email(email)
                 .username(username)
-                .password(passwordEncoder.encode(command.getPassword()))
+                .password(passwordEncoder.encode(cmd.getPassword()))
+                .createdAt(ZonedDateTime.now())
+                .updatedAt(ZonedDateTime.now())
                 .build();
         userRepository.save(user);
         log.info("saved user %s" + user);
 
-        return new RegisterUserResult(UserMapper.mapToDto(user, null));
+        UserDetails userDetails = AppUserDetails.builder()
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
+
+        return new RegisterUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(userDetails)));
     }
+
 }

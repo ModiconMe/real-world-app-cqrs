@@ -13,6 +13,12 @@ spring:
         format_sql: true
     show-sql: true
 
+  jackson:
+    deserialization:
+      unwrap_root_value: true
+
+
+
 #spring:
 #  application:
 #    name: customer

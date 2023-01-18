@@ -19,6 +19,10 @@ import java.util.UUID;
         uniqueConstraints = {
                 @UniqueConstraint(name = "user_email_unique", columnNames = "email"),
                 @UniqueConstraint(name = "user_username_unique", columnNames = "username")
+        },
+        indexes = {
+                @Index(name = "email_index", columnList = "email"),
+                @Index(name = "username_index", columnList = "username")
         }
 )
 public class UserEntity {

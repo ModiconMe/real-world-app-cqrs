@@ -9,9 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Getter
 @JsonRootName("user")
 public class LoginUser implements Command<LoginUserResult> {

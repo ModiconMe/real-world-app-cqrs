@@ -14,7 +14,6 @@ import java.util.UUID;
  */
 @Builder
 public record AppUserDetails(
-        UUID id,
         String email,
         String password
 ) implements UserDetails {

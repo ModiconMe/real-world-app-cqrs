@@ -17,9 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -31,31 +34,26 @@ public class LoginUserHandler implements CommandHandler<LoginUserResult, LoginUs
     private final JwtUtils jwtUtils;
 
     @Override
-    public LoginUserResult handle(LoginUser command) {
+    @Transactional(readOnly = true)
+    public LoginUserResult handle(LoginUser cmd) {
         // check email exists
-        String email = command.getEmail();
-        Optional<UserEntity> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isEmpty()) {
-            ApiException e = ApiException.exception(HttpStatus.NOT_FOUND, "user with email [%s] is not found", email);
-            log.error(e.getMessage());
-            throw e;
-        }
+        String email = cmd.getEmail();
+        UserEntity user = userRepository
+                .findByEmail(email)
+                .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with email [%s] is not found", email));
 
         // check password
-        UserEntity user = optionalUser.get();
-        if (!passwordEncoder.matches(command.getPassword(), user.getPassword())) {
-            ApiException e = ApiException.exception(HttpStatus.NOT_FOUND, "user with that combination of email and password is not found", email);
-            log.error(e.getMessage());
-            throw e;
-        }
+        if (!passwordEncoder.matches(cmd.getPassword(), user.getPassword()))
+            throw exception(HttpStatus.UNAUTHORIZED, "user with that combination of email and password is not found", email);
 
         // to generate jwt token
         UserDetails userDetails = AppUserDetails.builder()
-                .id(user.getId())
                 .email(email)
                 .password(user.getPassword())
                 .build();
+        log.info("login user %s" + user);
 
         return new LoginUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(userDetails)));
     }
+
 }

@@ -13,6 +13,12 @@ spring:
         format_sql: true
     show-sql: true
 
+  jackson:
+    deserialization:
+      unwrap_root_value: true
+
 jwt:
-  secret-key: secret-secret-secret-secret-secret-secret # at least 32 character
+  sing-key: secret-secret-secret-secret-secret-secret # at least 32 character
+  token-prefix: Token
   valid-time: 24 # hours
+  issuer: app

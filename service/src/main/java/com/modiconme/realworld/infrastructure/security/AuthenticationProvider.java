@@ -18,7 +18,6 @@ public class AuthenticationProvider {
     private final UserDetailsService userDetailsService;
 
     public Authentication getAuthentication(String username) {
-        userDetailsService.loadUserByUsername(username);
         return Optional.ofNullable(username)
                 .map(userDetailsService::loadUserByUsername)
                 .map(userDetails ->
