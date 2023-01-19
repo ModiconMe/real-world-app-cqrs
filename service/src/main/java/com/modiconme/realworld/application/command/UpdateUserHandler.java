@@ -66,7 +66,7 @@ public class UpdateUserHandler implements CommandHandler<UpdateUserResult, Updat
                 .updatedAt(ZonedDateTime.now())
                 .build();
         userRepository.save(user);
-        log.info("updated user %s" + user);
+        log.info("updated user {}", user);
 
         UserDetails userDetails = AppUserDetails.builder()
                 .email(user.getEmail())

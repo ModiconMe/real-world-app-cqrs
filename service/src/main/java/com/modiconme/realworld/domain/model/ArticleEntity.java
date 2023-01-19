@@ -7,10 +7,10 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode
 @Getter
 @Setter
 @Entity

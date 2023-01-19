@@ -54,7 +54,7 @@ public class RegisterUserHandler implements CommandHandler<RegisterUserResult, R
                 .updatedAt(ZonedDateTime.now())
                 .build();
         userRepository.save(user);
-        log.info("saved user %s" + user);
+        log.info("saved user {}", user);
 
         UserDetails userDetails = AppUserDetails.builder()
                 .email(user.getEmail())

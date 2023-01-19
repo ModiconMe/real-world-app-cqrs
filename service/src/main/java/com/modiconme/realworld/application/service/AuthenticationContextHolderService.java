@@ -22,8 +22,13 @@ public class AuthenticationContextHolderService {
 
     public String getCurrentUsername() {
         Object currentUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        AppUserDetails principal = (AppUserDetails) currentUser;
-        Optional<UserEntity> optionalUser = userRepository.findByEmail(principal.getUsername());
+        AppUserDetails principal;
+        String username = null;
+        if (currentUser instanceof UserDetails) {
+            principal = (AppUserDetails) currentUser;
+            username = principal.getUsername();
+        }
+        Optional<UserEntity> optionalUser = userRepository.findByEmail(username);
         return optionalUser.map(UserEntity::getUsername).orElse(null);
     }
 }

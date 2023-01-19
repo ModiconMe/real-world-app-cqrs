@@ -10,5 +10,6 @@ public class GetFeed implements Query<GetFeedResult> {
 
     private String limit;
     private String offset;
+    private String currentUsername;
 
 }

@@ -22,6 +22,11 @@ public class JpaTagRepositoryAdapter implements TagRepository {
     }
 
     @Override
+    public TagEntity save(TagEntity tagEntity) {
+        return repository.save(tagEntity);
+    }
+
+    @Override
     public Optional<TagEntity> findByTagName(String name) {
         return repository.findByTagName(name);
     }

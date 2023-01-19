@@ -38,7 +38,7 @@ public class FollowProfileHandler implements CommandHandler<FollowProfileResult,
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "profile with username [%s] is not found", profileUsername));
 
         String userUsername = cmd.getUserUsername();
-        UserEntity user = userRepository.findByUsername(profileUsername)
+        UserEntity user = userRepository.findByUsername(userUsername)
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", userUsername));
 
         // follow

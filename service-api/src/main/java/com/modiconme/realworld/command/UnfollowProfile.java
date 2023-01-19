@@ -2,7 +2,6 @@ package com.modiconme.realworld.command;
 
 import com.modiconme.realworld.cqrs.Command;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

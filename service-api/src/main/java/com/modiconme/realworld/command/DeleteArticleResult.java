@@ -1,6 +1,7 @@
 package com.modiconme.realworld.command;
 
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+@AllArgsConstructor
 public class DeleteArticleResult { }

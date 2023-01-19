@@ -18,3 +18,4 @@ public record ArticleDto(
         Long favoritesCount,
         ProfileDto author
 ) { }
+

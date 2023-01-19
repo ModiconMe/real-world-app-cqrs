@@ -4,19 +4,17 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.modiconme.realworld.cqrs.Command;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Getter
 @JsonRootName("article")
 public class CreateArticle implements Command<CreateArticleResult> {
+
+    @With
+    private String authorUsername;
 
     @NotEmpty
     private String title;
@@ -25,6 +23,6 @@ public class CreateArticle implements Command<CreateArticleResult> {
     @NotEmpty
     private String body;
 
-    private List<String> tags;
+    private List<String> tagList;
 
 }

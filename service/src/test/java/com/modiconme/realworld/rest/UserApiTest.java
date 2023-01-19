@@ -89,7 +89,7 @@ public class UserApiTest extends FeignBasedRestTest {
 
     @Test
     void should_returnCorrectData_whenUpdateUser() {
-        AuthUtils.RegisteredUser login = auth.register().login();
+        auth.register().login();
 
         UpdateUser newUser = UpdateUser.builder()
                 .username(ALTERED_USERNAME)

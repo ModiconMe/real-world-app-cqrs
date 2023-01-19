@@ -1,12 +1,14 @@
 package com.modiconme.realworld.command;
 
 import com.modiconme.realworld.cqrs.Command;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import java.util.List;
+@AllArgsConstructor
+@Getter
+public class DeleteArticle implements Command<DeleteArticleResult> {
 
-@NoArgsConstructor
-public class DeleteArticle implements Command<DeleteArticleResult> { }
+    private String currentUsername;
+    private String slug;
+
+}

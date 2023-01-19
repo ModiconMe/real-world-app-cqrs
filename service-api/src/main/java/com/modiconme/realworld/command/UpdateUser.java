@@ -3,7 +3,6 @@ package com.modiconme.realworld.command;
 import com.fasterxml.jackson.annotation.JsonRootName;
 import com.modiconme.realworld.cqrs.Command;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @NoArgsConstructor

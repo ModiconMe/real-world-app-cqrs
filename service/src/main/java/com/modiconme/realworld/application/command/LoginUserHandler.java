@@ -51,7 +51,7 @@ public class LoginUserHandler implements CommandHandler<LoginUserResult, LoginUs
                 .email(email)
                 .password(user.getPassword())
                 .build();
-        log.info("login user %s" + user);
+        log.info("login user {}", user);
 
         return new LoginUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(userDetails)));
     }

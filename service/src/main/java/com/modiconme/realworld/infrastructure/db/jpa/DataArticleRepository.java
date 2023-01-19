@@ -1,34 +1,49 @@
 package com.modiconme.realworld.infrastructure.db.jpa;
 
 import com.modiconme.realworld.domain.model.ArticleEntity;
-import com.modiconme.realworld.domain.model.TagEntity;
+import com.modiconme.realworld.domain.model.FollowRelationEntity;
 import com.modiconme.realworld.domain.model.UserEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
-import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface DataArticleRepository extends PagingAndSortingRepository<ArticleEntity, UUID> {
+public interface DataArticleRepository extends CrudRepository<ArticleEntity, UUID> {
 
-    Optional<ArticleEntity> findBySlug(String slug);
+    Optional<ArticleEntity> findBySlugIgnoreCaseContaining(String slug);
 
-//    @Query("SELECT Article a FROM ArticleEntity " +
-//            "JOIN a.author author " +
-//            "JOIN a.tags t " +
-//            "JOIN a.favoriteList fl " +
-//            "WHERE" +
-//            "(author = NULL OR author = a) AND" +
-//            "(tag = NULL OR tag = t) AND" +
-//            "(favoritedBy = NULL OR favoritedBy = fl.account) AND" +
-//            "(a.favoritedBy)")
-//    List<ArticleEntity> findByFilter(
-//            TagEntity tag,
-//            UserEntity author,
-//            UserEntity favoritedBy,
+    Optional<ArticleEntity> findBySlugIgnoreCase(String slug);
+
+    @Query("SELECT DISTINCT ar FROM ArticleEntity ar " +
+            "LEFT JOIN ar.author a " +
+            "LEFT JOIN ar.tags t " +
+            "LEFT JOIN ar.favoriteList f " +
+            "WHERE " +
+            "((:author IS NULL OR a.username = :author) OR " +
+            "(:tag IS NULL OR t.tagName = :tag) OR " +
+            "(:favoritedBy IS NULL OR f.username = :favoritedBy)) OR TRUE ")
+    List<ArticleEntity> findByFilter(
+            @Param("tag") String tag,
+            @Param("author") String author,
+            @Param("favoritedBy") String favoritedBy,
+            Pageable pageable);
+
+//    @Query("SELECT DISTINCT ar FROM ArticleEntity ar WHERE ar.author IN :followees")
+//    List<ArticleEntity> findByFeed(
+//            @Param("followees") List<UUID> followees,
 //            Pageable pageable);
+
+    @Query("SELECT DISTINCT ar FROM ArticleEntity ar " +
+            "LEFT JOIN ar.author ac " +
+            "LEFT JOIN ac.followers fe " +
+            "WHERE " +
+            "(fe.follower.username = :username)")
+    List<ArticleEntity> findByFeed(
+            @Param("username") String username,
+            Pageable pageable);
 
 }

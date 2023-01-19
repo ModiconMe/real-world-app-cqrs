@@ -1,9 +1,7 @@
 package com.modiconme.realworld.operation;
 
-import com.modiconme.realworld.command.CreateArticle;
-import com.modiconme.realworld.command.CreateArticleResult;
-import com.modiconme.realworld.command.DeleteArticleResult;
-import com.modiconme.realworld.command.UpdateArticleResult;
+import com.modiconme.realworld.command.*;
+import com.modiconme.realworld.query.GetArticleResult;
 import com.modiconme.realworld.query.GetArticlesResult;
 import com.modiconme.realworld.query.GetFeedResult;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +23,17 @@ public interface ArticleOperations {
             @RequestParam(value = "offset", defaultValue = "0") String offset
     );
 
-    @PutMapping("/articles")
-    CreateArticleResult createArticle(CreateArticle command);
+    @GetMapping("/articles/{slug}")
+    GetArticleResult getArticle(@PathVariable("slug") String slug);
 
-    @PostMapping("/articles/{slug}")
-    UpdateArticleResult updateArticle(@PathVariable("slug") String slug);
+
+    @PostMapping("/articles")
+    CreateArticleResult createArticle(@RequestBody CreateArticle command);
+
+    @PutMapping("/articles/{slug}")
+    UpdateArticleResult updateArticle(@PathVariable("slug") String slug, @RequestBody UpdateArticle command);
 
     @DeleteMapping("/articles/{slug}")
-    DeleteArticleResult deleteArticle(@PathVariable("slug") String slug);
+    void deleteArticle(@PathVariable("slug") String slug);
 
 }
