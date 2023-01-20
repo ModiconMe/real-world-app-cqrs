@@ -50,6 +50,7 @@ public class DeleteCommentHandler implements CommandHandler<DeleteCommentResult,
 
         article.getComments().remove(comment);
         articleRepository.save(article);
+        log.info("delete comment {} of article {}", comment, article);
 
         return new DeleteCommentResult();
     }

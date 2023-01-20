@@ -44,6 +44,7 @@ public class UnfollowProfileHandler implements CommandHandler<UnfollowProfileRes
                 .build();
         profile.getFollowers().removeIf(follower -> follower.equals(followRelation));
         userRepository.save(profile);
+        log.info("user {} unfollow profile {}", user, profile);
 
         return new UnfollowProfileResult(ProfileMapper.mapToDto(profile, user));
     }

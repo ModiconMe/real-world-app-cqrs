@@ -57,7 +57,7 @@ public class UpdateUserHandler implements CommandHandler<UpdateUserResult, Updat
             throw exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with email [%s] is already exists", email);
 
         // create user
-        user = user.toBuilder()
+        UserEntity newUser = user.toBuilder()
                 .email(cmd.getEmail() != null ? cmd.getEmail() : user.getEmail())
                 .username(cmd.getUsername() != null ? cmd.getUsername() : user.getUsername())
                 .password(cmd.getPassword() != null ? passwordEncoder.encode(cmd.getPassword()) : user.getPassword())
@@ -65,15 +65,15 @@ public class UpdateUserHandler implements CommandHandler<UpdateUserResult, Updat
                 .bio(cmd.getBio() != null ? cmd.getBio() : user.getBio())
                 .updatedAt(ZonedDateTime.now())
                 .build();
-        userRepository.save(user);
-        log.info("updated user {}", user);
+        userRepository.save(newUser);
+        log.info("updated user {}, to new user {}", user, newUser);
 
         UserDetails userDetails = AppUserDetails.builder()
-                .email(user.getEmail())
-                .password(user.getPassword())
+                .email(newUser.getEmail())
+                .password(newUser.getPassword())
                 .build();
 
-        return new UpdateUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(userDetails)));
+        return new UpdateUserResult(UserMapper.mapToDto(newUser, jwtUtils.generateAccessToken(userDetails)));
     }
 
 }

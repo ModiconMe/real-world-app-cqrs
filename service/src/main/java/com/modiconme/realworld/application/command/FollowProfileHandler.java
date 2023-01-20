@@ -50,6 +50,7 @@ public class FollowProfileHandler implements CommandHandler<FollowProfileResult,
                         .build())
                 .build();
         userRepository.save(profile);
+        log.info("user {} follow profile {}", user, profile);
 
         return new FollowProfileResult(ProfileMapper.mapToDto(profile, user));
     }

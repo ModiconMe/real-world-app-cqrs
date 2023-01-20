@@ -50,6 +50,7 @@ public class AddCommentHandler implements CommandHandler<AddCommentResult, AddCo
                 .comment(comment)
                 .build();
         articleRepository.save(article);
+        log.info("add comment {} to article {}", comment, article);
 
         return new AddCommentResult(CommentMapper.mapToDto(comment, user));
     }

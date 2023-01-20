@@ -44,6 +44,7 @@ public class DeleteArticleHandler implements CommandHandler<DeleteArticleResult,
             throw exception(HttpStatus.FORBIDDEN, "user with username [%s] is not owner of article [%s]", currentUsername, article.getSlug());
 
         articleRepository.delete(article);
+        log.info("delete article {}", article);
 
         return new DeleteArticleResult();
     }

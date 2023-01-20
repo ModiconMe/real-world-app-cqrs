@@ -28,9 +28,9 @@ public class ArticleApiTest extends FeignBasedRestTest {
 
     public static final String TEST_TITLE = "test-title";
     public static final String TEST_DESCRIPTION = "test-description";
-    public static final String TEST_BODY = "test-body";
+    public static final String TEST_BODY = "test-error";
     public static final String ALTERED_TITLE = "altered-title";
-    public static final String ALTERED_BODY = "altered-body";
+    public static final String ALTERED_BODY = "altered-error";
     public static final String ALTERED_DESCRIPTION = "altered-description";
 
     @Autowired

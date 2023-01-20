@@ -41,6 +41,7 @@ public class FavoriteArticleHandler implements CommandHandler<FavoriteArticleRes
                 .favoriteList(user)
                 .build();
         articleRepository.save(article);
+        log.info("favorite article {} by {}", article, user);
 
         return new FavoriteArticleResult(ArticleMapper.mapToDto(article, user));
     }

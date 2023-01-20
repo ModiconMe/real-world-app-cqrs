@@ -3,10 +3,15 @@
 Spring boot core app
 
 ### Highlights
-- 
+- Приложение построено на основе CQRS (command query responsibility segregation) архитектуры
+- Security построено на основе jwt токенов
+- Обработка исключений с помощью @ControllerAdvice
+- Микросервис состоит из 3 модулей (api, bus, service)
+- openfeing based integration tests
 
 Также:
-* 
+* [endpoints and json examples](https://realworld-docs.netlify.app/docs/specs/backend-specs/endpoints)
+* [api json answer formats](https://realworld-docs.netlify.app/docs/specs/backend-specs/api-response-format)
 
 ### Technology
 - Spring Boot 3.0.0 и Java 17
@@ -15,7 +20,7 @@ Spring boot core app
 - Logback
 - Spring Validation для валидации rest запросов
 - Jackson для сериализации и дессериализации запросов и ответов
-- JUnit 5 + AssertJ + Mockito для тестирования
+- JUnit 5 + AssertJ + OpenFeign для тестирования
 - Docker для [запуска](#Docker-run) в контейнере из Dockerfile
 
 ### Getting started
@@ -34,7 +39,8 @@ Spring boot core app
 
     ./gradlew test
 
-Процент покрытия строк кода тестами --%.
+Процент покрытия строк кода тестами 90%.
+![test-coverage.png](test-coverage.png)
 
 ### Docker-run
 

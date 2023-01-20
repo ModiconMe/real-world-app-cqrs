@@ -39,6 +39,7 @@ public class UnfavoriteArticleHandler implements CommandHandler<UnfavoriteArticl
 
         article.getFavoriteList().removeIf((f) -> f.equals(user));
         articleRepository.save(article);
+        log.info("unfavorite article {}, by {}", article, user);
 
         return new UnfavoriteArticleResult(ArticleMapper.mapToDto(article, user));
     }

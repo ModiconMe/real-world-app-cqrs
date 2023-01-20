@@ -61,16 +61,17 @@ public class UpdateArticleHandler implements CommandHandler<UpdateArticleResult,
             throw exception(HttpStatus.FORBIDDEN, "user with username [%s] is not owner of article [%s]", currentUsername, article.getSlug());
 
         // update article
-        article = article.toBuilder()
+        ArticleEntity newArticle = article.toBuilder()
                 .slug(newSlug == null ? oldSlug : newSlug)
                 .title(cmd.getTitle() == null ? article.getTitle() : cmd.getTitle())
                 .body(cmd.getBody() == null ? article.getBody() : cmd.getBody())
                 .description(cmd.getDescription() == null ? article.getDescription() : cmd.getDescription())
                 .updatedAt(ZonedDateTime.now())
                 .build();
-        articleRepository.save(article);
+        articleRepository.save(newArticle);
+        log.info("article {} updated to new article {}", article, newArticle);
 
-        return new UpdateArticleResult(ArticleMapper.mapToDto(article, author));
+        return new UpdateArticleResult(ArticleMapper.mapToDto(newArticle, author));
     }
 
 }

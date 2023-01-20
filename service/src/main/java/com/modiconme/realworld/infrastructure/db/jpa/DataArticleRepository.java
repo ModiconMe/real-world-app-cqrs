@@ -23,9 +23,9 @@ public interface DataArticleRepository extends CrudRepository<ArticleEntity, UUI
             "LEFT JOIN ar.tags t " +
             "LEFT JOIN ar.favoriteList f " +
             "WHERE " +
-            "((:author IS NULL OR a.username = :author) OR " +
-            "(:tag IS NULL OR t.tagName = :tag) OR " +
-            "(:favoritedBy IS NULL OR f.username = :favoritedBy)) OR TRUE ")
+            "(:author IS NULL OR a.username = :author) AND " +
+            "(:tag IS NULL OR t.tagName = :tag) AND " +
+            "(:favoritedBy IS NULL OR f.username = :favoritedBy)")
     List<ArticleEntity> findByFilter(
             @Param("tag") String tag,
             @Param("author") String author,

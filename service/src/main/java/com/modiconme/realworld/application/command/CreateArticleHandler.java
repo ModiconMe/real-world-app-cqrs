@@ -67,6 +67,7 @@ public class CreateArticleHandler implements CommandHandler<CreateArticleResult,
                 .updatedAt(ZonedDateTime.now())
                 .build();
         articleRepository.save(article);
+        log.info("create article {}", article);
 
         return new CreateArticleResult(ArticleMapper.mapToDto(article, user));
     }

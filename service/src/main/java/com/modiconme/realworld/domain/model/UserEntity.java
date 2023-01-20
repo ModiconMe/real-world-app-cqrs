@@ -39,6 +39,8 @@ public class UserEntity {
     private String username;
 
     private String bio;
+
+    @Lob
     private String image;
 
     @Column(nullable = false)
