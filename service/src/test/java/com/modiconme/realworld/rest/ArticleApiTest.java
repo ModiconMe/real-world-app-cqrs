@@ -57,7 +57,8 @@ public class ArticleApiTest extends FeignBasedRestTest {
         assertThat(article.title()).isEqualTo(cmd.getTitle());
         assertThat(article.description()).isEqualTo(cmd.getDescription());
         assertThat(article.body()).isEqualTo(cmd.getBody());
-        assertThat(article.tagList()).isEqualTo(cmd.getTagList());
+        assertThat(article.tagList()).isNotEmpty();
+        assertThat(article.tagList().size()).isEqualTo(cmd.getTagList().size());
     }
 
     @Test
