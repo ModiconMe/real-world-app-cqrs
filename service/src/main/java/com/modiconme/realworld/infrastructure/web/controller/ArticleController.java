@@ -64,4 +64,14 @@ public class ArticleController implements ArticleOperations {
     public void deleteComment(String slug, String commentId) {
         bus.executeCommand(new DeleteComment(slug, Long.valueOf(commentId), authService.getCurrentUsername()));
     }
+
+    @Override
+    public FavoriteArticleResult favoriteArticle(String slug) {
+        return bus.executeCommand(new FavoriteArticle(authService.getCurrentUsername(), slug));
+    }
+
+    @Override
+    public UnfavoriteArticleResult unfavoriteArticle(String slug) {
+        return bus.executeCommand(new UnfavoriteArticle(authService.getCurrentUsername(), slug));
+    }
 }

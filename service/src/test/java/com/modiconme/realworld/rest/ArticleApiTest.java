@@ -308,6 +308,68 @@ public class ArticleApiTest extends FeignBasedRestTest {
         assertThat(exception.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
+    @Test
+    void should_returnCorrectData_whenFavoriteArticle() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+
+        ArticleDto article = articleClient.favoriteArticle(createdArticle.slug()).getArticleDto();
+
+        assertThat(article.favorited()).isTrue();
+        assertThat(article.favoritesCount()).isEqualTo(1);
+    }
+
+    @Test
+    void should_return401_whenFavoriteArticleNoAuth() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+        auth.logout();
+
+        FeignException exception = catchThrowableOfType(() -> articleClient.favoriteArticle(createdArticle.slug()), FeignException.class);
+        assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    void should_return404_whenFavoriteArticleThatNotExist() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+
+        FeignException exception = catchThrowableOfType(() -> articleClient.favoriteArticle(createdArticle.slug() + "notexisted"), FeignException.class);
+        assertThat(exception.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void should_returnCorrectData_whenUnfavoriteArticle() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+        ArticleDto article = articleClient.favoriteArticle(createdArticle.slug()).getArticleDto();
+        assertThat(article.favorited()).isTrue();
+        assertThat(article.favoritesCount()).isEqualTo(1);
+
+        article = articleClient.unfavoriteArticle(createdArticle.slug()).getArticleDto();
+        assertThat(article.favorited()).isFalse();
+        assertThat(article.favoritesCount()).isEqualTo(0);
+    }
+
+    @Test
+    void should_return401_whenUnfavoriteArticleNoAuth() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+        auth.logout();
+
+        FeignException exception = catchThrowableOfType(() -> articleClient.unfavoriteArticle(createdArticle.slug()), FeignException.class);
+        assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    void should_return404_whenUnfavoriteArticleThatNotExist() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+
+        FeignException exception = catchThrowableOfType(() -> articleClient.unfavoriteArticle(createdArticle.slug() + "notexisted"), FeignException.class);
+        assertThat(exception.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
     private static CreateArticle createArticle() {
         return new CreateArticle(
                 UUID.randomUUID().toString(),

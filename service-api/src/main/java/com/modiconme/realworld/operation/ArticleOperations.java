@@ -43,4 +43,10 @@ public interface ArticleOperations {
     @DeleteMapping("/articles/{slug}/comments/{commentId}")
     void deleteComment(@PathVariable("slug") String slug, @PathVariable("commentId") String commentId);
 
+    @PostMapping("/articles/{slug}/favorite")
+    FavoriteArticleResult favoriteArticle(@PathVariable("slug") String slug);
+
+    @DeleteMapping("/articles/{slug}/favorite")
+    UnfavoriteArticleResult unfavoriteArticle(@PathVariable("slug") String slug);
+
 }
