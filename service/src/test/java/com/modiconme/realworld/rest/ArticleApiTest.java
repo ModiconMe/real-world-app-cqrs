@@ -3,9 +3,11 @@ package com.modiconme.realworld.rest;
 import com.modiconme.realworld.client.ArticleClient;
 import com.modiconme.realworld.client.ProfileClient;
 import com.modiconme.realworld.client.UserClient;
+import com.modiconme.realworld.command.AddComment;
 import com.modiconme.realworld.command.CreateArticle;
 import com.modiconme.realworld.command.UpdateArticle;
 import com.modiconme.realworld.dto.ArticleDto;
+import com.modiconme.realworld.dto.CommentDto;
 import com.modiconme.realworld.query.GetArticleResult;
 import com.modiconme.realworld.rest.config.FeignBasedRestTest;
 import com.modiconme.realworld.rest.utils.AuthUtils;
@@ -152,8 +154,7 @@ public class ArticleApiTest extends FeignBasedRestTest {
     void should_returnCorrectData_whenUpdateArticle() {
         auth.register().login();
 
-        CreateArticle cmd = createArticle();
-        ArticleDto createdArticle = articleClient.createArticle(cmd).getArticle();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
         UpdateArticle updateArticle = new UpdateArticle(
                 null, null, ALTERED_TITLE, ALTERED_DESCRIPTION, ALTERED_BODY);
         ArticleDto article = articleClient.updateArticle(createdArticle.slug(), updateArticle).getArticle();
@@ -166,8 +167,7 @@ public class ArticleApiTest extends FeignBasedRestTest {
     @Test
     void should_throw401_whenUpdateArticleNoAuth() {
         auth.register().login();
-        CreateArticle cmd = createArticle();
-        ArticleDto createdArticle = articleClient.createArticle(cmd).getArticle();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
         UpdateArticle updateArticle = new UpdateArticle(
                 null, null, ALTERED_TITLE, ALTERED_DESCRIPTION, ALTERED_BODY);
 
@@ -180,8 +180,7 @@ public class ArticleApiTest extends FeignBasedRestTest {
     @Test
     void should_throw404_whenUpdateNonExistedArticle() {
         auth.register().login();
-        CreateArticle cmd = createArticle();
-        ArticleDto createdArticle = articleClient.createArticle(cmd).getArticle();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
         UpdateArticle updateArticle = new UpdateArticle(
                 null, null, ALTERED_TITLE, ALTERED_DESCRIPTION, ALTERED_BODY);
 
@@ -193,10 +192,8 @@ public class ArticleApiTest extends FeignBasedRestTest {
     @Test
     void should_throw422_whenUpdateArticleWithSlugThatAlreadyExist() {
         auth.register().login();
-        CreateArticle cmd1 = createArticle();
-        CreateArticle cmd2 = createArticle();
-        ArticleDto createdArticle1 = articleClient.createArticle(cmd1).getArticle();
-        ArticleDto createdArticle2 = articleClient.createArticle(cmd2).getArticle();
+        ArticleDto createdArticle1 = articleClient.createArticle(createArticle()).getArticle();
+        ArticleDto createdArticle2 = articleClient.createArticle(createArticle()).getArticle();
         UpdateArticle updateArticle = new UpdateArticle(
                 null, null, createdArticle2.title(), ALTERED_DESCRIPTION, ALTERED_BODY);
 
@@ -208,15 +205,14 @@ public class ArticleApiTest extends FeignBasedRestTest {
     @Test
     void should_throw403_whenUpdateArticleNotByOwner() {
         auth.register().login();
-        CreateArticle cmd1 = createArticle();
-        ArticleDto createdArticle1 = articleClient.createArticle(cmd1).getArticle();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
 
         auth.register().login();
 
         UpdateArticle updateArticle = new UpdateArticle(
                 null, null, ALTERED_TITLE, ALTERED_DESCRIPTION, ALTERED_BODY);
 
-        FeignException exception = catchThrowableOfType(() -> articleClient.updateArticle(createdArticle1.slug(), updateArticle), FeignException.class);
+        FeignException exception = catchThrowableOfType(() -> articleClient.updateArticle(createdArticle.slug(), updateArticle), FeignException.class);
 
         assertThat(exception.status()).isEqualTo(HttpStatus.FORBIDDEN.value());
     }
@@ -224,8 +220,7 @@ public class ArticleApiTest extends FeignBasedRestTest {
     @Test
     void should_returnCorrectData_whenDeleteArticle() {
         auth.register().login();
-        CreateArticle cmd = createArticle();
-        ArticleDto createdArticle = articleClient.createArticle(cmd).getArticle();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
         articleClient.deleteArticle(createdArticle.slug());
 
         FeignException exception = catchThrowableOfType(() -> articleClient.getArticle(createdArticle.slug()), FeignException.class);
@@ -242,11 +237,75 @@ public class ArticleApiTest extends FeignBasedRestTest {
     @Test
     void should_throw403_whenDeleteArticleNotByOwner() {
         auth.register().login();
-        CreateArticle cmd = createArticle();
-        ArticleDto createdArticle = articleClient.createArticle(cmd).getArticle();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
         auth.register().login();
         FeignException exception = catchThrowableOfType(() -> articleClient.deleteArticle(createdArticle.slug()), FeignException.class);
         assertThat(exception.status()).isEqualTo(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    void should_returnCorrectData_whenAddComment() {
+        AuthUtils.RegisteredUser author = auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+        AddComment cmd = addComment();
+        CommentDto addedComment = articleClient.addComment(createdArticle.slug(), cmd).getComment();
+
+        assertThat(addedComment.body()).isEqualTo(cmd.getBody());
+        assertThat(addedComment.author().username()).isEqualTo(author.getUsername());
+    }
+
+    @Test
+    void should_throw401_whenAddCommentNoAuth() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+        auth.logout();
+
+        FeignException exception = catchThrowableOfType(() -> articleClient.addComment(createdArticle.slug(), addComment()), FeignException.class);
+        assertThat(exception.status()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    void should_throw404_whenAddCommentToNotExistedArticle() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+
+        FeignException exception = catchThrowableOfType(() -> articleClient.addComment(createdArticle.slug() + "notexisted", addComment()), FeignException.class);
+        assertThat(exception.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void should_returnCorrectData_whenGetComments() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+        CommentDto addedComment = articleClient.addComment(createdArticle.slug(), addComment()).getComment();
+
+        List<CommentDto> comments = articleClient.getComments(createdArticle.slug()).getComments();
+
+        assertThat(comments).isNotEmpty();
+        assertThat(comments.get(0).body()).isEqualTo(addedComment.body());
+    }
+
+    @Test
+    void should_returnCorrectData_whenGetCommentsNoAuth() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+        CommentDto addedComment = articleClient.addComment(createdArticle.slug(), addComment()).getComment();
+        auth.logout();
+
+        List<CommentDto> comments = articleClient.getComments(createdArticle.slug()).getComments();
+
+        assertThat(comments).isNotEmpty();
+        assertThat(comments.get(0).body()).isEqualTo(addedComment.body());
+    }
+
+    @Test
+    void should_throw404_whenGetCommentsOfNotExistedArticle() {
+        auth.register().login();
+        ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
+        articleClient.addComment(createdArticle.slug(), addComment());
+
+        FeignException exception = catchThrowableOfType(() -> articleClient.getComments(createdArticle.slug() + "notexisted"), FeignException.class);
+        assertThat(exception.status()).isEqualTo(HttpStatus.NOT_FOUND.value());
     }
 
     private static CreateArticle createArticle() {
@@ -257,6 +316,10 @@ public class ArticleApiTest extends FeignBasedRestTest {
                 UUID.randomUUID().toString(),
                 List.of(UUID.randomUUID().toString(), UUID.randomUUID().toString())
         );
+    }
+
+    private static AddComment addComment() {
+        return new AddComment(null, null, UUID.randomUUID().toString());
     }
 
 }

@@ -49,4 +49,19 @@ public class ArticleController implements ArticleOperations {
     public void deleteArticle(String slug) {
         bus.executeCommand(new DeleteArticle(authService.getCurrentUsername(), slug));
     }
+
+    @Override
+    public AddCommentResult addComment(String slug, AddComment command) {
+        return bus.executeCommand(command.withSlug(slug).withAuthorUsername(authService.getCurrentUsername()));
+    }
+
+    @Override
+    public GetCommentsResult getComments(String slug) {
+        return bus.executeQuery(new GetComments(authService.getCurrentUsername(), slug));
+    }
+
+    @Override
+    public void deleteComment(String slug, String commentId) {
+        bus.executeCommand(new DeleteComment(slug, Long.valueOf(commentId), authService.getCurrentUsername()));
+    }
 }

@@ -33,7 +33,7 @@ public class CommentEntity {
             name = "account_id", referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "comment_account_id_fk")
     )
-    private UserEntity user;
+    private UserEntity author;
 
 
 }

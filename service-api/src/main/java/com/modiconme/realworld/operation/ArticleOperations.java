@@ -1,9 +1,7 @@
 package com.modiconme.realworld.operation;
 
 import com.modiconme.realworld.command.*;
-import com.modiconme.realworld.query.GetArticleResult;
-import com.modiconme.realworld.query.GetArticlesResult;
-import com.modiconme.realworld.query.GetFeedResult;
+import com.modiconme.realworld.query.*;
 import org.springframework.web.bind.annotation.*;
 
 public interface ArticleOperations {
@@ -35,5 +33,14 @@ public interface ArticleOperations {
 
     @DeleteMapping("/articles/{slug}")
     void deleteArticle(@PathVariable("slug") String slug);
+
+    @PostMapping("/articles/{slug}/comments")
+    AddCommentResult addComment(@PathVariable("slug") String slug, @RequestBody AddComment command);
+
+    @GetMapping("/articles/{slug}/comments")
+    GetCommentsResult getComments(@PathVariable("slug") String slug);
+
+    @DeleteMapping("/articles/{slug}/comments/{commentId}")
+    void deleteComment(@PathVariable("slug") String slug, @PathVariable("commentId") String commentId);
 
 }

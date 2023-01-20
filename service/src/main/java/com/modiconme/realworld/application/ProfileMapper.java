@@ -3,7 +3,6 @@ package com.modiconme.realworld.application;
 import com.modiconme.realworld.domain.model.FollowRelationEntity;
 import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.dto.ProfileDto;
-import com.modiconme.realworld.dto.UserDto;
 
 public class ProfileMapper {
 
