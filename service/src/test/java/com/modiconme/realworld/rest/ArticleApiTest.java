@@ -313,7 +313,7 @@ public class ArticleApiTest extends FeignBasedRestTest {
         auth.register().login();
         ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
 
-        ArticleDto article = articleClient.favoriteArticle(createdArticle.slug()).getArticleDto();
+        ArticleDto article = articleClient.favoriteArticle(createdArticle.slug()).getArticle();
 
         assertThat(article.favorited()).isTrue();
         assertThat(article.favoritesCount()).isEqualTo(1);
@@ -342,11 +342,11 @@ public class ArticleApiTest extends FeignBasedRestTest {
     void should_returnCorrectData_whenUnfavoriteArticle() {
         auth.register().login();
         ArticleDto createdArticle = articleClient.createArticle(createArticle()).getArticle();
-        ArticleDto article = articleClient.favoriteArticle(createdArticle.slug()).getArticleDto();
+        ArticleDto article = articleClient.favoriteArticle(createdArticle.slug()).getArticle();
         assertThat(article.favorited()).isTrue();
         assertThat(article.favoritesCount()).isEqualTo(1);
 
-        article = articleClient.unfavoriteArticle(createdArticle.slug()).getArticleDto();
+        article = articleClient.unfavoriteArticle(createdArticle.slug()).getArticle();
         assertThat(article.favorited()).isFalse();
         assertThat(article.favoritesCount()).isEqualTo(0);
     }

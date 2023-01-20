@@ -13,5 +13,6 @@ import java.util.List;
 public class GetFeedResult {
 
     private List<ArticleDto> articles;
+    private Integer articlesCount;
 
 }

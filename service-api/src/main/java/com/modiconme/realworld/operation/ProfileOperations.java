@@ -16,7 +16,7 @@ public interface ProfileOperations {
     @PostMapping("/profiles/{profile}/follow")
     FollowProfileResult followProfile(@PathVariable("profile") String profile);
 
-    @DeleteMapping("/profiles/{profile}/unfollow")
+    @DeleteMapping("/profiles/{profile}/follow")
     UnfollowProfileResult unfollowProfile(@PathVariable("profile") String profile);
 
 }

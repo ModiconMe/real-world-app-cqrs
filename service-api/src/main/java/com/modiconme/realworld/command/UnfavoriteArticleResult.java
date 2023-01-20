@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UnfavoriteArticleResult {
 
-    private ArticleDto articleDto;
+    private ArticleDto article;
 
 }

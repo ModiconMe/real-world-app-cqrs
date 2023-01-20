@@ -33,7 +33,7 @@ public class GetFeedHandler implements QueryHandler<GetFeedResult, GetFeed> {
                 query.getLimit()
         );
 
-        return new GetFeedResult(articles.stream().map((a) -> ArticleMapper.mapToDto(a, user)).toList());
+        return new GetFeedResult(articles.stream().map((a) -> ArticleMapper.mapToDto(a, user)).toList(), articles.size());
     }
 
 }

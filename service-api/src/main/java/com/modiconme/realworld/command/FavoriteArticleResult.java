@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class FavoriteArticleResult {
 
-    private ArticleDto articleDto;
+    private ArticleDto article;
 
 }

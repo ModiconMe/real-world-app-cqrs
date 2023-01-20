@@ -18,9 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
@@ -49,11 +48,11 @@ public class CreateArticleHandler implements CommandHandler<CreateArticleResult,
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", authorUsername));
 
         // check tags
-        List<TagEntity> tags = new ArrayList<>();
+        Set<TagEntity> tags = new LinkedHashSet<>();
         if (cmd.getTagList() != null) {
             tags = cmd.getTagList().stream()
                     .map((t) -> tagRepository.findByTagName(t).orElseGet(() -> new TagEntity(t)))
-                    .toList();
+                    .collect(Collectors.toSet());
         }
 
         ArticleEntity article = ArticleEntity.builder()

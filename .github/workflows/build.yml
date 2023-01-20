@@ -11,14 +11,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - uses: actions/setup-java@v1
-#        with:
-#          java-version: 1.17
-#
-#      - name: Build with Gradle
-#        run: ./gradlew build
+
     steps:
       - uses: actions/checkout@v3
       - name: Set up JDK 17
@@ -32,3 +25,20 @@ jobs:
         uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
         with:
           arguments: build
+
+      - uses: actions/setup-node@v1
+
+      - name: Run app for testing
+        run: |
+          nohup java -jar service/build/libs/service.jar &
+          sleep 5s
+
+      - name: Run postman collection
+        run: >
+          npx newman run
+          https://raw.githubusercontent.com/gothinkster/realworld/master/api/Conduit.postman_collection.json
+          --delay-request 200
+          --global-var "APIURL=http://localhost:8080/api"
+          --global-var "USERNAME=username"
+          --global-var "EMAIL=username@example.com"
+          --global-var "PASSWORD=password"

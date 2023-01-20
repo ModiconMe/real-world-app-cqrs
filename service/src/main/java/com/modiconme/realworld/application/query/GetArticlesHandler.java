@@ -43,7 +43,7 @@ public class GetArticlesHandler implements QueryHandler<GetArticlesResult, GetAr
 
         UserEntity user = userRepository.findByUsername(query.getCurrentUsername()).orElse(null);
 
-        return new GetArticlesResult(articles.stream().map((a) -> ArticleMapper.mapToDto(a, user)).toList());
+        return new GetArticlesResult(articles.stream().map((a) -> ArticleMapper.mapToDto(a, user)).toList(), articles.size());
     }
 
 }
