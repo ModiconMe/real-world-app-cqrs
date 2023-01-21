@@ -42,3 +42,6 @@ jobs:
           --global-var "USERNAME=username"
           --global-var "EMAIL=username@example.com"
           --global-var "PASSWORD=password"
+
+      - name: Push to docker hub
+        run: ./build.sh modiconme ${{ secrets.DOCKER_HUB_PASSWORD }}

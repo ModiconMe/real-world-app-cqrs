@@ -1,3 +1,5 @@
+import com.google.cloud.tools.jib.api.buildplan.ImageFormat
+
 plugins {
     id 'java'
     id 'org.springframework.boot'
@@ -6,6 +8,11 @@ plugins {
 }
 
 group 'com.modiconme.realworld'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
     mavenCentral()
@@ -44,3 +51,24 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+//build {
+//    dependsOn(bootBuildImage)
+//    dependsOn(jibDockerBuild)
+//}
+//bootBuildImage {
+//    imageName.set("modiconme/real-world-cqrs-impl:1")
+//    publish = true
+//    docker {
+//        publishRegistry {
+//            username = "modiconme"
+//            password = "arcsinwt1"
+//        }
+//    }
+//}
+
+//jib.to.image = "modiconme/${project.name}:${version}"
+//jib {
+//
+//}
+//jib.to.image = "modiconme/testimage:3"
