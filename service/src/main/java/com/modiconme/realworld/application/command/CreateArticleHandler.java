@@ -48,11 +48,11 @@ public class CreateArticleHandler implements CommandHandler<CreateArticleResult,
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", authorUsername));
 
         // check tags
-        Set<TagEntity> tags = new LinkedHashSet<>();
+        List<TagEntity> tags = new ArrayList<>();
         if (cmd.getTagList() != null) {
             tags = cmd.getTagList().stream()
                     .map((t) -> tagRepository.findByTagName(t).orElseGet(() -> new TagEntity(t)))
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
         }
 
         ArticleEntity article = ArticleEntity.builder()
