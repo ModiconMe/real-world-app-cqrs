@@ -18,7 +18,6 @@ public interface ArticleRepository {
 
     List<ArticleEntity> findByFilters(String tag, String author, String favoritedBy, String offset, String limit);
 
-    //    List<ArticleEntity> findByFeed(List<UUID> followees, String offset, String limit);
     List<ArticleEntity> findByFeed(String username, String offset, String limit);
 
     void delete(ArticleEntity article);

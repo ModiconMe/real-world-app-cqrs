@@ -56,6 +56,7 @@ public class RegisterUserHandler implements CommandHandler<RegisterUserResult, R
         userRepository.save(user);
         log.info("saved user {}", user);
 
+        // to generate jwt token
         UserDetails userDetails = AppUserDetails.builder()
                 .email(user.getEmail())
                 .password(user.getPassword())

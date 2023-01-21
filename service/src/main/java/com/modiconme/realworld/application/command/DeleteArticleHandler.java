@@ -33,7 +33,7 @@ public class DeleteArticleHandler implements CommandHandler<DeleteArticleResult,
         ArticleEntity article = articleRepository.findBySlug(slug)
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "article with slug [%s] is not found", slug));
 
-        // find user that update article
+        // find user that delete article
         String currentUsername = cmd.getCurrentUsername();
         UserEntity user = userRepository.findByUsername(currentUsername)
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", currentUsername));

@@ -28,10 +28,12 @@ public class UnfollowProfileHandler implements CommandHandler<UnfollowProfileRes
     @Override
     @Transactional
     public UnfollowProfileResult handle(UnfollowProfile cmd) {
+        // find profile to unfollow (followee)
         String profileUsername = cmd.getProfileUsername();
         UserEntity profile = userRepository.findByUsername(profileUsername)
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "profile with username [%s] is not found", profileUsername));
 
+        // find user profile (follower)
         String userUsername = cmd.getUserUsername();
         UserEntity user = userRepository.findByUsername(profileUsername)
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", userUsername));

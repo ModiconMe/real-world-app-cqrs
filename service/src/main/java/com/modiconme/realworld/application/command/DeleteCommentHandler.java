@@ -44,6 +44,7 @@ public class DeleteCommentHandler implements CommandHandler<DeleteCommentResult,
         CommentEntity comment = article.getComments().stream().filter((c) -> c.getId().equals(commentId)).findFirst()
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "comment with id [%d] is not found", commentId));
 
+        // check that current user is owner of comment
         UserEntity author = comment.getAuthor();
         if (!Objects.equals(user, author))
             throw exception(HttpStatus.FORBIDDEN, "user with username [%s] is not owner of comment with id [%d]", currentUsername, commentId);

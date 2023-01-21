@@ -33,10 +33,12 @@ public class FollowProfileHandler implements CommandHandler<FollowProfileResult,
     @Override
     @Transactional
     public FollowProfileResult handle(FollowProfile cmd) {
+        // find profile to follow (followee)
         String profileUsername = cmd.getProfileUsername();
         UserEntity profile = userRepository.findByUsername(profileUsername)
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "profile with username [%s] is not found", profileUsername));
 
+        // find user profile (follower)
         String userUsername = cmd.getUserUsername();
         UserEntity user = userRepository.findByUsername(userUsername)
                 .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", userUsername));

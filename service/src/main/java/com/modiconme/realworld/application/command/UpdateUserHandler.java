@@ -68,6 +68,7 @@ public class UpdateUserHandler implements CommandHandler<UpdateUserResult, Updat
         userRepository.save(newUser);
         log.info("updated user {}, to new user {}", user, newUser);
 
+        // to generate jwt token
         UserDetails userDetails = AppUserDetails.builder()
                 .email(newUser.getEmail())
                 .password(newUser.getPassword())
