@@ -1,0 +1,20 @@
+services:
+  real-world-backend:
+    image: modiconme/real-world-app-cqrs:latest
+    container_name: realworldbackend
+    ports:
+      - "8080:8080"
+    networks:
+      - realworld
+
+  real-world-frontend:
+    image: modiconme/real-world-app-cqrs-frontend:latest
+    container_name: realworldfrontend
+    ports:
+      - "80:80"
+    networks:
+      - realworld
+
+networks:
+  realworld:
+    driver: bridge
