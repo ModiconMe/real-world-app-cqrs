@@ -44,7 +44,7 @@ public class GetArticlesHandler implements QueryHandler<GetArticlesResult, GetAr
                 query.getLimit()
         );
 
-//        articles.forEach(a -> a.setTags(new TreeSet<>(a.getTags())));
+        articles.forEach(a -> a.setTags(new TreeSet<>(a.getTags())));
 
         UserEntity user = userRepository.findByUsername(query.getCurrentUsername()).orElse(null);
 
