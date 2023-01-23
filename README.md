@@ -54,3 +54,14 @@
 
 `docker run --name real-world-backend -p 8080:8080 real-world-backend:v1`
 
+### Протестировать локально с официальным frontend'ом
+
+Требуется установить nodejs.
+
+1. Запустить бэкенд из докер образа
+2. Запуск фронтэнда:
+   1. `cd frontend`
+   2. `npm install`
+   3. `npm install -g @angular/cli`
+   4. `npm run build`
+   5. `ng serve --open`
