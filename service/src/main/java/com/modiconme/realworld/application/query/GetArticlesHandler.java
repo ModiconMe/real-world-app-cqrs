@@ -4,6 +4,7 @@ import com.modiconme.realworld.application.ArticleMapper;
 import com.modiconme.realworld.application.service.SlugService;
 import com.modiconme.realworld.cqrs.QueryHandler;
 import com.modiconme.realworld.domain.model.ArticleEntity;
+import com.modiconme.realworld.domain.model.TagEntity;
 import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.ArticleRepository;
 import com.modiconme.realworld.domain.repository.TagRepository;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
@@ -40,6 +42,7 @@ public class GetArticlesHandler implements QueryHandler<GetArticlesResult, GetAr
                 query.getOffset(),
                 query.getLimit()
         );
+        articles.stream().forEach((a) -> a.getTags().stream().sorted(Comparator.comparing(TagEntity::getTagName)));
 
         UserEntity user = userRepository.findByUsername(query.getCurrentUsername()).orElse(null);
 
