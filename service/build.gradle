@@ -1,10 +1,7 @@
-import com.google.cloud.tools.jib.api.buildplan.ImageFormat
-
 plugins {
     id 'java'
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
-    id 'com.google.cloud.tools.jib' version '3.3.1'
 }
 
 group 'com.modiconme.realworld'
@@ -25,19 +22,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.modelmapper:modelmapper:3.1.1'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
-    implementation 'com.google.guava:guava:31.1-jre'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
     runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'org.postgresql:postgresql'
 
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
@@ -54,21 +48,14 @@ test {
 
 //build {
 //    dependsOn(bootBuildImage)
-//    dependsOn(jibDockerBuild)
 //}
 //bootBuildImage {
-//    imageName.set("modiconme/real-world-cqrs-impl:1")
+//    imageName.set("modiconme/real-world-cqrs-impl:latest")
 //    publish = true
 //    docker {
 //        publishRegistry {
-//            username = "modiconme"
-//            password = "arcsinwt1"
+//            username = "dockerUsername"
+//            password = "dockerPassword"
 //        }
 //    }
 //}
-
-//jib.to.image = "modiconme/${project.name}:${version}"
-//jib {
-//
-//}
-//jib.to.image = "modiconme/testimage:3"

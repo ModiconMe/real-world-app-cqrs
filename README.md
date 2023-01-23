@@ -1,6 +1,6 @@
 > ### Spring Boot application
 
-Spring boot core app
+Приложение разработано на основе спецификации [real-world-app](https://realworld-docs.netlify.app/docs/specs/backend-specs/endpoints).
 
 ### Highlights
 - Приложение построено на основе CQRS (command query responsibility segregation) архитектуры
@@ -14,7 +14,7 @@ Spring boot core app
 * [api json answer formats](https://realworld-docs.netlify.app/docs/specs/backend-specs/api-response-format)
 
 ### Technology
-- Spring Boot 3.0.0 и Java 17
+- Spring Boot 3.0.1 и Java 17
 - Spring Data JPA + Hibernate + H2-database
 - Spring Security 6 + jwt
 - Logback
@@ -22,6 +22,7 @@ Spring boot core app
 - Jackson для сериализации и дессериализации запросов и ответов
 - JUnit 5 + AssertJ + OpenFeign для тестирования
 - Docker для [запуска](#Docker-run) в контейнере из Dockerfile
+- GitHub actions в качестве CI (continuous integration)
 
 ### Getting started
 Требуется Java 17 или выше
@@ -47,9 +48,9 @@ Spring boot core app
 Для запуска приложения в докер контейнере в корне проекта запускаем команду
 для построения докер образа.
 
-`docker build -t realworld:v1 .`
+`docker build -t real-world-backend:v1 .`
 
 После построения образа создаем и запускаем контейер с помощью docker run
 
-`docker run --name realworld -p 8080:8080 realworld:v1`
+`docker run --name real-world-backend -p 8080:8080 real-world-backend:v1`
 
