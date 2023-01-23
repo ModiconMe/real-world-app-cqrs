@@ -52,6 +52,7 @@ public class CreateArticleHandler implements CommandHandler<CreateArticleResult,
         if (cmd.getTagList() != null) {
             tags = cmd.getTagList().stream()
                     .map((t) -> tagRepository.findByTagName(t).orElseGet(() -> new TagEntity(t)))
+                    .sorted()
                     .collect(Collectors.toList());
         }
 

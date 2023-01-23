@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @Table
-public class TagEntity {
+public class TagEntity implements Comparable<TagEntity> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +20,10 @@ public class TagEntity {
 
     public TagEntity(String tagName) {
         this.tagName = tagName;
+    }
+
+    @Override
+    public int compareTo(TagEntity t) {
+        return this.tagName.compareTo(t.tagName);
     }
 }

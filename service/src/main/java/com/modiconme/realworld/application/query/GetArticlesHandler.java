@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
@@ -42,7 +43,8 @@ public class GetArticlesHandler implements QueryHandler<GetArticlesResult, GetAr
                 query.getOffset(),
                 query.getLimit()
         );
-        articles.stream().forEach((a) -> a.getTags().stream().sorted(Comparator.comparing(TagEntity::getTagName)));
+
+//        articles.forEach(a -> a.setTags(new TreeSet<>(a.getTags())));
 
         UserEntity user = userRepository.findByUsername(query.getCurrentUsername()).orElse(null);
 
