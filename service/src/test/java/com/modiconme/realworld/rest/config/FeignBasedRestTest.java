@@ -1,6 +1,5 @@
 package com.modiconme.realworld.rest.config;
 
-import com.modiconme.realworld.client.ArticleClient;
 import com.modiconme.realworld.client.UserClient;
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtendWith;

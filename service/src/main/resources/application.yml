@@ -1,3 +1,5 @@
+
+
 spring:
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
@@ -16,7 +18,6 @@ spring:
   jackson:
     deserialization:
       unwrap_root_value: true
-
 
 
 #spring:
@@ -40,3 +41,5 @@ jwt:
   token-prefix: Token
   valid-time: 24 # hours
   issuer: app
+server:
+  port: 8080

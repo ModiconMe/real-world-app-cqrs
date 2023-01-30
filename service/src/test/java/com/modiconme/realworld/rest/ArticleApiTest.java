@@ -2,13 +2,11 @@ package com.modiconme.realworld.rest;
 
 import com.modiconme.realworld.client.ArticleClient;
 import com.modiconme.realworld.client.ProfileClient;
-import com.modiconme.realworld.client.UserClient;
 import com.modiconme.realworld.command.AddComment;
 import com.modiconme.realworld.command.CreateArticle;
 import com.modiconme.realworld.command.UpdateArticle;
 import com.modiconme.realworld.dto.ArticleDto;
 import com.modiconme.realworld.dto.CommentDto;
-import com.modiconme.realworld.query.GetArticleResult;
 import com.modiconme.realworld.rest.config.FeignBasedRestTest;
 import com.modiconme.realworld.rest.utils.AuthUtils;
 import feign.FeignException;
@@ -17,12 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
-import java.time.chrono.ChronoZonedDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowableOfType;
 
 public class ArticleApiTest extends FeignBasedRestTest {
 

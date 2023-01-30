@@ -4,6 +4,8 @@ plugins {
     id 'io.spring.dependency-management'
 }
 
+println "${project.getParent().projectDir}/frontend"
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
@@ -40,16 +42,50 @@ test {
     useJUnitPlatform()
 }
 
-//build {
-//    dependsOn(bootBuildImage)
-//}
-//bootBuildImage {
-//    imageName.set("modiconme/real-world-backend:latest")
-//    publish = true
-//    docker {
-//        publishRegistry {
-////            username = "dockerUsername"
-////            password = "dockerPassword"
-//        }
-//    }
-//}
+apply plugin: 'com.github.node-gradle.node'
+
+node {
+    version = "18.13.0"
+    download = false
+    workDir = file("${project.getParent().projectDir}/frontend/nodejs")
+    npmWorkDir = file("${project.getParent().projectDir}/frontend/npm")
+    nodeModulesDir = file("${project.getParent().projectDir}/frontend")
+}
+
+processResources{
+    dependsOn 'copyFrontendToBuild'
+}
+
+task npmInstall2(type: NpmTask) {
+    dependsOn 'npmSetup'
+    execOverrides {
+        it.ignoreExitValue = true
+        it.workingDir = "${project.getParent().projectDir}/frontend"
+    }
+    args = ['install']
+}
+
+task npmShowVersion(type: NpmTask) {
+    execOverrides {
+        it.ignoreExitValue = true
+        it.workingDir = "${project.getParent().projectDir}/frontend"
+    }
+    args = ['--version']
+}
+
+task npmBuild(type: NpmTask) {
+    dependsOn 'npmInstall2'
+    execOverrides {
+        it.workingDir = "${project.getParent().projectDir}/frontend"
+    }
+    args = ['run', 'build']
+}
+
+task copyFrontendToBuild(type: Copy) {
+    from "${project.getParent().projectDir}/frontend/dist/"
+    into "$buildDir/resources/main/static"
+}
+
+build {
+    dependsOn 'npmBuild'
+}
