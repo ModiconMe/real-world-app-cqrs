@@ -2,9 +2,10 @@ package com.modiconme.realworld.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 @Builder
 @AllArgsConstructor
@@ -12,7 +13,7 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Entity
-@Table
+@Table(name = "comment")
 public class CommentEntity {
 
     @EqualsAndHashCode.Include
@@ -20,7 +21,7 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Lob
+    @JdbcTypeCode(SqlTypes.LONGNVARCHAR)
     @Column(nullable = false)
     private String body;
     @Column(nullable = false)
@@ -30,7 +31,7 @@ public class CommentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
-            name = "account_id", referencedColumnName = "id",
+            name = "id_author", referencedColumnName = "id",
             foreignKey = @ForeignKey(name = "comment_account_id_fk")
     )
     private UserEntity author;

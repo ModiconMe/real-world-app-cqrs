@@ -1,8 +1,6 @@
 package com.modiconme.realworld.application.command;
 
 import com.modiconme.realworld.application.UserMapper;
-import com.modiconme.realworld.command.RegisterUser;
-import com.modiconme.realworld.command.RegisterUserResult;
 import com.modiconme.realworld.command.UpdateUser;
 import com.modiconme.realworld.command.UpdateUserResult;
 import com.modiconme.realworld.cqrs.CommandHandler;
@@ -10,7 +8,6 @@ import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.UserRepository;
 import com.modiconme.realworld.infrastructure.security.AppUserDetails;
 import com.modiconme.realworld.infrastructure.security.jwt.JwtUtils;
-import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
@@ -45,15 +41,13 @@ public class UpdateUserHandler implements CommandHandler<UpdateUserResult, Updat
         // check username duplicate
         String username = cmd.getUsername();
         Optional<UserEntity> byUsername = userRepository.findByUsername(username);
-        if (byUsername.isPresent() &&
-                !byUsername.get().getId().equals(user.getId()))
+        if (byUsername.isPresent() && byUsername.get().getId() != user.getId())
             throw exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with username [%s] is already exists", username);
 
         // check email duplicate
         String email = cmd.getEmail();
         Optional<UserEntity> byEmail = userRepository.findByEmail(email);
-        if (byEmail.isPresent() &&
-                !byEmail.get().getId().equals(user.getId()))
+        if (byEmail.isPresent() && byEmail.get().getId() != user.getId())
             throw exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with email [%s] is already exists", email);
 
         // create user

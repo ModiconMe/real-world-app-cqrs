@@ -11,17 +11,19 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table
+@Table(name = "follow_relation")
 public class FollowRelationEntity {
 
     @EmbeddedId
     private FollowRelationId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("followerId")
-    private UserEntity follower;
+    @JoinColumn(name="id_followee")
+    @MapsId("idFollowee")
+    private UserEntity followee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("followeeId")
-    private UserEntity followee;
+    @JoinColumn(name="id_follower")
+    @MapsId("idFollower")
+    private UserEntity follower;
 }

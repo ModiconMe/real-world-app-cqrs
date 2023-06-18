@@ -16,9 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.UUID;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
@@ -46,7 +44,6 @@ public class RegisterUserHandler implements CommandHandler<RegisterUserResult, R
 
         // create user
         UserEntity user = UserEntity.builder()
-                .id(UUID.randomUUID())
                 .email(email)
                 .username(username)
                 .password(passwordEncoder.encode(cmd.getPassword()))

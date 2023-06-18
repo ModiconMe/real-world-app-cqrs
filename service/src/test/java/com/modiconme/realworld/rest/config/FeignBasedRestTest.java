@@ -1,30 +1,37 @@
 package com.modiconme.realworld.rest.config;
 
 import com.modiconme.realworld.client.UserClient;
-import org.junit.jupiter.api.extension.BeforeAllCallback;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.util.TestSocketUtils;
+import org.testcontainers.containers.PostgreSQLContainer;
 
 @EnableFeignClients(basePackageClasses = UserClient.class)
 @Import(ServerPortCustomizer.class)
-@ExtendWith(FeignBasedRestTest.Before.class)
+@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class FeignBasedRestTest {
+public abstract class FeignBasedRestTest {
 
-    public static class Before implements BeforeAllCallback {
+    private static final PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:14.1");
 
-        @Override
-        public void beforeAll(ExtensionContext context) {
-            if (System.getProperty("server.port") == null) {
-                int port = TestSocketUtils.findAvailableTcpPort();
-                System.setProperty("server.port", String.valueOf(port));
-            }
+    @BeforeAll
+    static void runContainer() {
+        if (System.getProperty("server.port") == null) {
+            int port = TestSocketUtils.findAvailableTcpPort();
+            System.setProperty("server.port", String.valueOf(port));
         }
 
+        container.start();
+    }
+
+    @DynamicPropertySource
+    static void postgresProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", container::getJdbcUrl);
     }
 
 }

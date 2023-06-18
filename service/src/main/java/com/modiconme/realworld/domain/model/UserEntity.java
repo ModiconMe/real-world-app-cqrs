@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
@@ -21,8 +20,9 @@ import static com.modiconme.realworld.infrastructure.utils.exception.ApiExceptio
 @Setter
 @Entity
 @Table(
+        name = "users",
         uniqueConstraints = {
-                @UniqueConstraint(name = "user_email_unique", columnNames = "email"),
+                @UniqueConstraint(name = "uq_user_email", columnNames = "email"),
                 @UniqueConstraint(name = "user_username_unique", columnNames = "username")
         },
         indexes = {
@@ -34,7 +34,8 @@ public class UserEntity {
 
     @EqualsAndHashCode.Include
     @Id
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(nullable = false)
     private String email;
@@ -45,7 +46,6 @@ public class UserEntity {
 
     private String bio;
 
-    @Lob
     private String image;
 
     @Column(nullable = false)

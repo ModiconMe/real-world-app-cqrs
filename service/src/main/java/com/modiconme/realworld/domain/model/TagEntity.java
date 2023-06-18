@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
-@Table
+@Table(name = "tag")
 public class TagEntity implements Comparable<TagEntity> {
 
     @Id

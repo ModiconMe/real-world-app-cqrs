@@ -4,7 +4,6 @@ import jakarta.persistence.Embeddable;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,7 +12,7 @@ import java.util.UUID;
 @Embeddable
 public class FollowRelationId implements Serializable {
 
-    private UUID followerId;
-    private UUID followeeId;
+    private long idFollowee;
+    private long idFollower;
 
 }

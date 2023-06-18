@@ -18,7 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
@@ -56,7 +57,6 @@ public class CreateArticleHandler implements CommandHandler<CreateArticleResult,
         }
 
         ArticleEntity article = ArticleEntity.builder()
-                .id(UUID.randomUUID())
                 .slug(slug)
                 .title(cmd.getTitle())
                 .body(cmd.getBody())

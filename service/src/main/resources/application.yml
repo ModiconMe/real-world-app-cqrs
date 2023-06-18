@@ -1,40 +1,25 @@
-
-
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password: password
-    driver-class-name: org.h2.Driver
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: saeed
+    password: root
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-#    show-sql: true
+    show-sql: true
 
   jackson:
     deserialization:
       unwrap_root_value: true
 
-
-#spring:
-#  application:
-#    name: customer
-#  datasource:
-#    username: postgres
-#    url: jdbc:postgresql://localhost:5432/postgres
-#    password: root
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.PostgreSQLDialect
-#        format_sql: true
-#    show-sql: true
+logging:
+  level:
+    root: info
 
 jwt:
   sing-key: secret-secret-secret-secret-secret-secret # at least 32 character

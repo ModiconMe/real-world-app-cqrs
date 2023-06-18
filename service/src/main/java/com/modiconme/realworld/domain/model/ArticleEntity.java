@@ -3,34 +3,38 @@ package com.modiconme.realworld.domain.model;
 import com.modiconme.realworld.domain.repository.ArticleRepository;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Getter
 @Setter
 @Entity
 @Table(
+        name = "article",
         uniqueConstraints = {
-                @UniqueConstraint(name = "article_slug_unique", columnNames = "slug")
+                @UniqueConstraint(name = "uq_article_slug", columnNames = "slug")
         },
         indexes = {
                 @Index(name = "slug_index", columnList = "slug"),
-                @Index(name = "author_index", columnList = "author_id")
+                @Index(name = "author_index", columnList = "id_author")
         }
 )
 public class ArticleEntity {
 
+        @EqualsAndHashCode.Include
         @Id
-        private UUID id;
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private long id;
 
         @Column(nullable = false)
         private String slug;
@@ -39,7 +43,7 @@ public class ArticleEntity {
         @Column(nullable = false)
         private String description;
 
-        @Lob
+        @JdbcTypeCode(SqlTypes.LONGNVARCHAR)
         @Column(nullable = false)
         private String body;
 
@@ -50,14 +54,14 @@ public class ArticleEntity {
 
         @ManyToOne
         @JoinColumn(
-                name = "author_id", referencedColumnName = "id", nullable = false,
+                name = "id_author", referencedColumnName = "id", nullable = false,
                 foreignKey = @ForeignKey(name = "article_id_account_id_fk")
         )
         private UserEntity author;
 
         @Singular
         @OneToMany(cascade = CascadeType.ALL)
-        @JoinColumn(name = "article_id", referencedColumnName = "id", nullable = false,
+        @JoinColumn(name = "id_article", referencedColumnName = "id", nullable = false,
                 foreignKey = @ForeignKey(name = "article_id_comment_id_fk")
         )
         private Set<CommentEntity> comments;
@@ -65,18 +69,18 @@ public class ArticleEntity {
         @Singular
         @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
         @JoinTable(
-                name = "article_tags",
-                joinColumns = @JoinColumn(name = "article_id"),
-                inverseJoinColumns = @JoinColumn(name = "tag_id")
+                name = "article_article_tag",
+                joinColumns = @JoinColumn(name = "id_article"),
+                inverseJoinColumns = @JoinColumn(name = "id_tag")
         )
         private Set<TagEntity> tags;
 
         @Singular(value = "favoriteList")
         @ManyToMany
         @JoinTable(
-                name = "favorite_by",
-                joinColumns = @JoinColumn(name = "article_id"),
-                inverseJoinColumns = @JoinColumn(name = "user_id")
+                name = "article_user_favorite",
+                joinColumns = @JoinColumn(name = "id_article"),
+                inverseJoinColumns = @JoinColumn(name = "id_user")
         )
         private Set<UserEntity> favoriteList;
 
