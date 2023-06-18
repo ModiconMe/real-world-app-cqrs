@@ -1,0 +1,16 @@
+plugins {
+    id 'groovy'
+    id 'groovy-gradle-plugin'
+}
+
+repositories {
+    gradlePluginPortal()
+}
+
+dependencies {
+    implementation libs.plugin.spring.boot
+    implementation libs.plugin.spring.dependencyManagement
+    implementation libs.plugin.docker
+}
+
+// https://docs.gradle.org/current/samples/sample_convention_plugins.html

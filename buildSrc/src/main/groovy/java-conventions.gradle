@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+    id 'jacoco-conventions'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}

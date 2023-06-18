@@ -1,11 +1,9 @@
-plugins {
-    id "com.github.node-gradle.node" version "3.5.1"
-}
+allprojects {
+    group 'edu.modicon.app'
 
-subprojects {
     repositories {
         mavenCentral()
     }
 }
 
-group 'com.modiconme.realworld'
+// https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/

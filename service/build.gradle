@@ -1,7 +1,8 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot'
-    id 'io.spring.dependency-management'
+    id 'java-conventions'
+    id 'spring-conventions'
+    id 'docker-conventions'
+    id 'intTest-conventions'
 }
 
 java {
@@ -13,29 +14,44 @@ dependencies {
     implementation project(':service-bus')
     implementation project(':service-api')
 
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation libs.spring.web
+    implementation libs.spring.validation
+    implementation libs.spring.jpa
 
-    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
-    runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
-    runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation libs.spring.security
+    implementation libs.jwt.api
+    runtimeOnly libs.jwt.impl
+    runtimeOnly libs.jwt.jackson
 
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly libs.postgreSQL
 
-    runtimeOnly 'com.h2database:h2'
+    implementation libs.liquebase
+    implementation libs.openApi
 
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly libs.lombok
+    annotationProcessor libs.lombok
+
     testImplementation 'org.springframework.security:spring-security-test'
 
-    testImplementation "org.springframework.cloud:spring-cloud-starter-openfeign:${openFeignVersion}"
-    testImplementation "io.github.openfeign:feign-jackson:${jacksonFeignVersion}"
+
 }
 
-test {
-    useJUnitPlatform()
+dependencies {
+    testCompileOnly libs.lombok
+    testAnnotationProcessor libs.lombok
+
+    testImplementation libs.testcontainers
+    testImplementation libs.spring.test
+
+    testImplementation libs.openfeign
+    testImplementation libs.openfeign.jackson
+}
+
+dependencies {
+    intTestCompileOnly libs.lombok
+    intTestAnnotationProccessor libs.lombok
+
+    intTestImplementation libs.faker
+    intTestImplementation libs.testcontainers
+    intTestImplementation libs.spring.test
 }
