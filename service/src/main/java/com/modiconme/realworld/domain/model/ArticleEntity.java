@@ -1,11 +1,15 @@
 package com.modiconme.realworld.domain.model;
 
+import com.modiconme.realworld.domain.repository.ArticleRepository;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
+
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -75,4 +79,10 @@ public class ArticleEntity {
                 inverseJoinColumns = @JoinColumn(name = "user_id")
         )
         private Set<UserEntity> favoriteList;
+
+        public static ArticleEntity getExistedArticleOrThrow(String slug, ArticleRepository articleRepository) {
+                return articleRepository.findBySlug(slug)
+                        .orElseThrow(() -> exception(HttpStatus.NOT_FOUND,
+                                "article with slug [%s] is not found", slug));
+        }
 }

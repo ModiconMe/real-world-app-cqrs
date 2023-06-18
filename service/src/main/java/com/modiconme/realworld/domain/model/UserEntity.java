@@ -1,11 +1,16 @@
 package com.modiconme.realworld.domain.model;
 
+import com.modiconme.realworld.domain.repository.ArticleRepository;
+import com.modiconme.realworld.domain.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.UUID;
+
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -55,6 +60,27 @@ public class UserEntity {
             orphanRemoval = true
     )
     private Set<FollowRelationEntity> followers;
+
+    public static UserEntity getExistedUserOrThrow(String username, UserRepository userRepository) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", username));
+    }
+
+    public CommentEntity writeComment(String body, ArticleEntity article, ArticleRepository articleRepository) {
+        CommentEntity comment = CommentEntity.builder()
+                .body(body)
+                .createdAt(ZonedDateTime.now())
+                .updatedAt(ZonedDateTime.now())
+                .author(this)
+                .build();
+
+        articleRepository.save(
+                article.toBuilder()
+                        .comment(comment)
+                        .build()
+        );
+        return comment;
+    }
 }
 
 
