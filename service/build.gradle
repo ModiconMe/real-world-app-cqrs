@@ -27,19 +27,9 @@ dependencies {
 
     implementation libs.liquebase
     implementation libs.openApi
-
-    compileOnly libs.lombok
-    annotationProcessor libs.lombok
-
-    testImplementation 'org.springframework.security:spring-security-test'
-
-
 }
 
 dependencies {
-    testCompileOnly libs.lombok
-    testAnnotationProcessor libs.lombok
-
     testImplementation libs.testcontainers
     testImplementation libs.spring.test
 
@@ -48,10 +38,10 @@ dependencies {
 }
 
 dependencies {
-    intTestCompileOnly libs.lombok
-    intTestAnnotationProccessor libs.lombok
-
     intTestImplementation libs.faker
     intTestImplementation libs.testcontainers
     intTestImplementation libs.spring.test
+
+    intTestImplementation libs.openfeign
+    intTestImplementation libs.openfeign.jackson
 }

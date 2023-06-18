@@ -11,6 +11,7 @@ dependencies {
     implementation libs.plugin.spring.boot
     implementation libs.plugin.spring.dependencyManagement
     implementation libs.plugin.docker
+    implementation libs.plugin.lombok
 }
 
 // https://docs.gradle.org/current/samples/sample_convention_plugins.html

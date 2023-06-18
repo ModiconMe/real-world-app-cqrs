@@ -33,3 +33,4 @@ lombok = { module = 'org.projectlombok:lombok' }
 plugin-spring-dependencyManagement = { module = 'io.spring.gradle:dependency-management-plugin', version.ref = 'spring-dependency-management' }
 plugin-spring-boot = { module = 'org.springframework.boot:spring-boot-gradle-plugin', version.ref = 'spring-boot' }
 plugin-docker = 'com.bmuschko.docker-spring-boot-application:com.bmuschko.docker-spring-boot-application.gradle.plugin:9.3.1'
+plugin-lombok = 'io.freefair.gradle:lombok-plugin:8.0.1'

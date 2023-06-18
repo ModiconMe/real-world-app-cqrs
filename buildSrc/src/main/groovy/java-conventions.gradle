@@ -3,6 +3,8 @@ plugins {
     id 'jacoco-conventions'
 }
 
+project.plugins.apply('io.freefair.lombok')
+
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
