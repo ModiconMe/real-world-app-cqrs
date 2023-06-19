@@ -13,7 +13,7 @@ import static com.modiconme.realworld.infrastructure.utils.exception.ApiExceptio
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(exclude = {"followers"})
 @Getter

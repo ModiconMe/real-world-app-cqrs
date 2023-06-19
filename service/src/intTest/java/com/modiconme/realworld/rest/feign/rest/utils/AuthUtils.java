@@ -4,16 +4,20 @@ import com.modiconme.realworld.command.LoginUser;
 import com.modiconme.realworld.command.LoginUserResult;
 import com.modiconme.realworld.command.RegisterUser;
 import com.modiconme.realworld.rest.feign.client.UserClient;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@RequiredArgsConstructor
 @Component
 public class AuthUtils {
 
-    private final UserClient userClient;
+    @Autowired(required = false)
+    private UserClient userClient;
 
     public RegisteredUser register() {
         String uuid = UUID.randomUUID().toString();
