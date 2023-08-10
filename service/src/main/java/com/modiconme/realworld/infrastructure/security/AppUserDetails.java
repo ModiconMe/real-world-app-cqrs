@@ -1,22 +1,21 @@
 package com.modiconme.realworld.infrastructure.security;
 
-import lombok.Builder;
+import com.modiconme.realworld.domain.model.UserEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
 
-/**
- * Application user credentials. Stored in SecurityApplication context
- */
-@Builder
-public record AppUserDetails(
-        String email,
-        String password
-) implements UserDetails {
+@RequiredArgsConstructor
+public class AppUserDetails implements UserDetails {
+
+    @Serial
+    private static final long serialVersionUID = -7745847682848118234L;
+
+    private final String email;
+    private final String password;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -51,6 +50,10 @@ public record AppUserDetails(
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public static AppUserDetails fromUser(UserEntity user) {
+        return new AppUserDetails(user.getEmail(), user.getPassword());
     }
 
 }

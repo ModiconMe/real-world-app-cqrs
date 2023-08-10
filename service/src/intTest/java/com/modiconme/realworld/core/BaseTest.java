@@ -3,16 +3,13 @@ package com.modiconme.realworld.core;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 @IntSpringBootTest
 @AutoConfigureTestEntityManager
-@ContextConfiguration(classes = TestDbFacade.Config.class)
-@Sql(scripts = "classpath:sql/data.sql")
+//@Sql(scripts = "classpath:sql/data.sql")
 public abstract class BaseTest {
 
     public static final Faker FAKER = new Faker();

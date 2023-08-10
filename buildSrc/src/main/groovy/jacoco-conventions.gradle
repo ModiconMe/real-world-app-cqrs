@@ -2,11 +2,7 @@ plugins {
     id 'jacoco'
 }
 
-project.jacocoTestReport {
-    reports {
-        xml.required = true
-    }
-    executionData.from += files('build/jacoco/test.exec', 'build/jacoco/intTest.exec')
-}
+project.jacocoTestReport.reports.xml.required = true
+project.jacocoTestReport.executionData.from += files('build/jacoco/test.exec', 'build/jacoco/intTest.exec')
 
 check.finalizedBy project.jacocoTestReport

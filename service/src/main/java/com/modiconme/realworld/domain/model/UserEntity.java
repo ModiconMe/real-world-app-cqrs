@@ -4,12 +4,11 @@ import com.modiconme.realworld.domain.repository.ArticleRepository;
 import com.modiconme.realworld.domain.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.http.HttpStatus;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.notFound;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -63,7 +62,7 @@ public class UserEntity {
 
     public static UserEntity getExistedUserOrThrow(String username, UserRepository userRepository) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", username));
+                .orElseThrow(() -> notFound("Profile not found", username));
     }
 
     public CommentEntity writeComment(String body, ArticleEntity article, ArticleRepository articleRepository) {

@@ -3,24 +3,17 @@ package com.modiconme.realworld.application.command;
 import com.modiconme.realworld.application.UserMapper;
 import com.modiconme.realworld.command.LoginUser;
 import com.modiconme.realworld.command.LoginUserResult;
-import com.modiconme.realworld.command.RegisterUser;
-import com.modiconme.realworld.command.RegisterUserResult;
 import com.modiconme.realworld.cqrs.CommandHandler;
 import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.UserRepository;
 import com.modiconme.realworld.infrastructure.security.AppUserDetails;
 import com.modiconme.realworld.infrastructure.security.jwt.JwtUtils;
-import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-import java.util.UUID;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
@@ -47,13 +40,9 @@ public class LoginUserHandler implements CommandHandler<LoginUserResult, LoginUs
             throw exception(HttpStatus.UNAUTHORIZED, "user with that combination of email and password is not found", email);
 
         // to generate jwt token
-        UserDetails userDetails = AppUserDetails.builder()
-                .email(email)
-                .password(user.getPassword())
-                .build();
         log.info("login user {}", user);
 
-        return new LoginUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(userDetails)));
+        return new LoginUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(AppUserDetails.fromUser(user))));
     }
 
 }

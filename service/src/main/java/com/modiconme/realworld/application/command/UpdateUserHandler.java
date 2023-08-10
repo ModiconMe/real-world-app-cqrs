@@ -11,7 +11,6 @@ import com.modiconme.realworld.infrastructure.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,13 +61,8 @@ public class UpdateUserHandler implements CommandHandler<UpdateUserResult, Updat
         userRepository.save(newUser);
         log.info("updated user {}, to new user {}", user, newUser);
 
-        // to generate jwt token
-        UserDetails userDetails = AppUserDetails.builder()
-                .email(newUser.getEmail())
-                .password(newUser.getPassword())
-                .build();
 
-        return new UpdateUserResult(UserMapper.mapToDto(newUser, jwtUtils.generateAccessToken(userDetails)));
+        return new UpdateUserResult(UserMapper.mapToDto(newUser, jwtUtils.generateAccessToken(AppUserDetails.fromUser(user))));
     }
 
 }

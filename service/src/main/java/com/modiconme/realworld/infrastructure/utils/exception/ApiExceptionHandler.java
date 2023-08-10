@@ -18,9 +18,6 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(new ApiExceptionDto(List.of(e.getMessage())), e.getStatus());
     }
 
-    /**
-     * Spring validation exception handling
-     */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<ApiExceptionDto> handleApiRequestValidException(MethodArgumentNotValidException e) {
         return new ResponseEntity<>(

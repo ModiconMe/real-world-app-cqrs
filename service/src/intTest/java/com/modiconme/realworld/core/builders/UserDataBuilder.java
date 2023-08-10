@@ -1,5 +1,6 @@
-package com.modiconme.realworld.core;
+package com.modiconme.realworld.core.builders;
 
+import com.modiconme.realworld.core.TestDataBuilder;
 import com.modiconme.realworld.domain.model.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -23,14 +24,13 @@ public class UserDataBuilder implements TestDataBuilder<UserEntity> {
 
     @Override
     public UserEntity build() {
-        final var user = new UserEntity();
-        user.setUsername(username);
-        user.setEmail(email);
-        user.setPassword(password);
-        user.setBio(bio);
-        user.setImage(image);
-        user.setCreatedAt(createdAt);
-        user.setUpdatedAt(updatedAt);
-        return user;
+        return UserEntity.builder()
+                .username(username)
+                .email(email)
+                .password(password)
+                .bio(bio)
+                .image(image)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt).build();
     }
 }

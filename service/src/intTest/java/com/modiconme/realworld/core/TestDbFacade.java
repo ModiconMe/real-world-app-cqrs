@@ -1,19 +1,19 @@
 package com.modiconme.realworld.core;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.Arrays;
 import java.util.List;
 
+@Component
+@RequiredArgsConstructor
 public class TestDbFacade {
-    @Autowired
-    private TestEntityManager testEntityManager;
-    @Autowired
-    private TransactionTemplate transactionTemplate;
+
+    private final TestEntityManager testEntityManager;
+    private final TransactionTemplate transactionTemplate;
 
     public <T> List<T> persisted(T... entities) {
         List<T> list = Arrays.asList(entities);
@@ -23,10 +23,11 @@ public class TestDbFacade {
     }
 
     public <T> T persisted(T entity) {
-        return transactionTemplate.execute(status -> {
-            testEntityManager.persistAndFlush(entity);
-            return entity;
-        });
+        return transactionTemplate.execute((status -> testEntityManager.persistAndFlush(entity)));
+    }
+
+    public <T> T merge(T entity) {
+        return transactionTemplate.execute((status -> testEntityManager.merge(entity)));
     }
 
     public <T> TestDataBuilder<T> persisted(TestDataBuilder<T> builder) {
@@ -35,14 +36,5 @@ public class TestDbFacade {
             testEntityManager.persistAndFlush(entity);
             return entity;
         });
-    }
-
-    @TestConfiguration
-    public static class Config {
-
-        @Bean
-        public TestDbFacade testDbFacade() {
-            return new TestDbFacade();
-        }
     }
 }

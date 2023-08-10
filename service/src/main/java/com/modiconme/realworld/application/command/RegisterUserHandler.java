@@ -11,7 +11,6 @@ import com.modiconme.realworld.infrastructure.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,15 +50,9 @@ public class RegisterUserHandler implements CommandHandler<RegisterUserResult, R
                 .updatedAt(ZonedDateTime.now())
                 .build();
         userRepository.save(user);
-        log.info("saved user {}", user);
+        log.info("saved user {}", user);;
 
-        // to generate jwt token
-        UserDetails userDetails = AppUserDetails.builder()
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .build();
-
-        return new RegisterUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(userDetails)));
+        return new RegisterUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(AppUserDetails.fromUser(user))));
     }
 
 }

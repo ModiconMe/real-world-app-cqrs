@@ -19,4 +19,20 @@ public class ApiException extends RuntimeException {
         return new ApiException(status, format(message, args));
     }
 
+    public static ApiException notFound(String message, Object... args) {
+        return exception(HttpStatus.NOT_FOUND, message, args);
+    }
+
+    public static ApiException unauthorized(String message, Object... args) {
+        return exception(HttpStatus.UNAUTHORIZED, message, args);
+    }
+
+    public static ApiException forbidden(String message, Object... args) {
+        return exception(HttpStatus.FORBIDDEN, message, args);
+    }
+
+    public static ApiException unprocessableEntity(String message, Object... args) {
+        return exception(HttpStatus.UNPROCESSABLE_ENTITY, message, args);
+    }
+
 }

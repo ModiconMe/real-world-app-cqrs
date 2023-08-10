@@ -5,8 +5,8 @@ import lombok.*;
 
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(exclude = "id")
+@NoArgsConstructor
+//@EqualsAndHashCode(exclude = "id")
 @ToString
 @Getter
 @Setter
@@ -15,15 +15,15 @@ import lombok.*;
 public class FollowRelationEntity {
 
     @EmbeddedId
-    private FollowRelationId id;
+    private FollowRelationId id = new FollowRelationId();
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_followee")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="id_followee", nullable = false, foreignKey = @ForeignKey(name = "id_followee_fk"))
     @MapsId("idFollowee")
     private UserEntity followee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_follower")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name="id_follower", nullable = false, foreignKey = @ForeignKey(name = "id_follower_fk"))
     @MapsId("idFollower")
     private UserEntity follower;
 }

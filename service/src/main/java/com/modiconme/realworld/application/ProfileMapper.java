@@ -9,7 +9,7 @@ public class ProfileMapper {
     public static ProfileDto mapToDto(UserEntity profile, UserEntity user) {
         boolean isFollowing = profile.getFollowers().stream()
                 .map(FollowRelationEntity::getFollower)
-                .anyMatch((follower) -> follower.equals(user));
+                .anyMatch(follower -> follower.equals(user));
 
         return ProfileDto.builder()
                 .username(profile.getUsername())

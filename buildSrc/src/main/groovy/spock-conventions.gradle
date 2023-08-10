@@ -2,15 +2,10 @@ plugins {
     id 'groovy'
 }
 
-ext {
-    spockVersion = '2.4-M1-groovy-4.0'
-    groovyVersion = '4.0.9'
-}
-
 dependencies {
-    testImplementation "org.spockframework:spock-spring:${spockVersion}"
-    testImplementation "org.spockframework:spock-core:${spockVersion}"
-    testImplementation "org.apache.groovy:groovy-all:${groovyVersion}"
+    testImplementation libs.groovy
+    testImplementation libs.spock.core
+    testImplementation libs.spock.spring
 }
 
 sourceSets {
@@ -24,7 +19,7 @@ sourceSets {
 }
 
 dependencies {
-    intTestImplementation "org.spockframework:spock-spring:${spockVersion}"
-    intTestImplementation "org.spockframework:spock-core:${spockVersion}"
-    intTestImplementation "org.apache.groovy:groovy-all:${groovyVersion}"
+    intTestImplementation libs.groovy
+    intTestImplementation libs.spock.core
+    intTestImplementation libs.spock.spring
 }
