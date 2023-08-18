@@ -15,7 +15,7 @@ public class ArticleMapper {
 
     public static ArticleDto mapToDto(ArticleEntity article, UserEntity currentUser) {
         Set<UserEntity> favoriteList = article.getFavoriteList();
-        boolean isFavorited = favoriteList.stream().anyMatch((f) -> f.equals(currentUser));
+        boolean isFavorited = favoriteList.stream().anyMatch(f -> f.equals(currentUser));
         long size = favoriteList.size();
         ProfileDto author = ProfileMapper.mapToDto(article.getAuthor(), currentUser);
         List<String> tagList = article.getTags().stream().map(TagEntity::getTagName).toList();

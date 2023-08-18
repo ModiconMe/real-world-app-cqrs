@@ -10,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.StreamSupport;
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -22,12 +20,7 @@ public class GetTagsHandler implements QueryHandler<GetTagsResult, GetTags> {
     @Override
     @Transactional(readOnly = true)
     public GetTagsResult handle(GetTags query) {
-        return new GetTagsResult(
-                StreamSupport
-                .stream(tagRepository.findAll().spliterator(), false)
-                .map(TagEntity::getTagName)
-                .toList()
-        );
+        return new GetTagsResult(tagRepository.findAll().stream().map(TagEntity::getTagName).toList());
     }
 
 }

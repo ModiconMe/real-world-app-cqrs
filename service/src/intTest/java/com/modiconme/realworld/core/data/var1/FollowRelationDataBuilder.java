@@ -1,6 +1,5 @@
-package com.modiconme.realworld.core.builders;
+package com.modiconme.realworld.core.data.var1;
 
-import com.modiconme.realworld.core.TestDataBuilder;
 import com.modiconme.realworld.domain.model.FollowRelationEntity;
 import com.modiconme.realworld.domain.model.FollowRelationId;
 import com.modiconme.realworld.domain.model.UserEntity;

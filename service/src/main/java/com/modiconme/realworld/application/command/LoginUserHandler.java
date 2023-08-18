@@ -4,18 +4,17 @@ import com.modiconme.realworld.application.UserMapper;
 import com.modiconme.realworld.command.LoginUser;
 import com.modiconme.realworld.command.LoginUserResult;
 import com.modiconme.realworld.cqrs.CommandHandler;
-import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.UserRepository;
+import com.modiconme.realworld.dto.UserDto;
 import com.modiconme.realworld.infrastructure.security.AppUserDetails;
 import com.modiconme.realworld.infrastructure.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.notFound;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,20 +28,15 @@ public class LoginUserHandler implements CommandHandler<LoginUserResult, LoginUs
     @Override
     @Transactional(readOnly = true)
     public LoginUserResult handle(LoginUser cmd) {
-        // check email exists
-        String email = cmd.getEmail();
-        UserEntity user = userRepository
-                .findByEmail(email)
-                .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with email [%s] is not found", email));
+        log.info("Start: login user: [request='{}']", cmd);
 
-        // check password
-        if (!passwordEncoder.matches(cmd.getPassword(), user.getPassword()))
-            throw exception(HttpStatus.UNAUTHORIZED, "user with that combination of email and password is not found", email);
+        UserDto user = userRepository.findByEmail(cmd.getEmail())
+                .filter(u -> !passwordEncoder.matches(cmd.getPassword(), u.getPassword()))
+                .map(u -> UserMapper.mapToDto(u, jwtUtils.generateAccessToken(AppUserDetails.fromUser(u))))
+                .orElseThrow(() -> notFound("User not found"));
 
-        // to generate jwt token
-        log.info("login user {}", user);
-
-        return new LoginUserResult(UserMapper.mapToDto(user, jwtUtils.generateAccessToken(AppUserDetails.fromUser(user))));
+        log.info("End: login user [user='{}']", user);
+        return new LoginUserResult(user);
     }
 
 }

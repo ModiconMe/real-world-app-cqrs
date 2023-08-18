@@ -13,7 +13,7 @@ import lombok.*;
 public class UpdateUser implements Command<UpdateUserResult> {
 
     @With
-    private String currentUsername;
+    private long userId;
 
     @Email
     private String email;

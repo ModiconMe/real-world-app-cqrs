@@ -27,4 +27,9 @@ public class AuthenticationContextHolderService {
         Optional<UserEntity> optionalUser = userRepository.findByEmail(username);
         return optionalUser.map(UserEntity::getUsername).orElse(null);
     }
+
+    public Long getUserId() {
+        return ((AppUserDetails) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal()).getUserId();
+    }
 }

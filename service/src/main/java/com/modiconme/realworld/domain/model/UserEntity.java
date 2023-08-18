@@ -1,14 +1,17 @@
 package com.modiconme.realworld.domain.model;
 
+import com.modiconme.realworld.command.UpdateUser;
 import com.modiconme.realworld.domain.repository.ArticleRepository;
 import com.modiconme.realworld.domain.repository.UserRepository;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.ZonedDateTime;
 import java.util.Set;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.notFound;
+import static org.springframework.util.StringUtils.hasText;
 
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -63,6 +66,35 @@ public class UserEntity {
     public static UserEntity getExistedUserOrThrow(String username, UserRepository userRepository) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> notFound("Profile not found", username));
+    }
+
+    public UserEntity updateUser(UpdateUser newUser, PasswordEncoder passwordEncoder) {
+        return this.toBuilder()
+                .username(getNewFieldIfValid(username, newUser.getUsername()))
+                .email(getNewFieldIfValid(email, newUser.getEmail()))
+                .password(getNewFieldIfValid(password, newUser.getPassword(), passwordEncoder))
+                .bio(getNewFieldIfValid(bio, newUser.getBio()))
+                .image(getNewFieldIfValid(bio, newUser.getImage()))
+                .updatedAt(ZonedDateTime.now())
+                .build();
+    }
+
+    private String getNewFieldIfValid(String oldField, String newField) {
+        return hasText(newField) && !newField.equals(oldField) ? newField : oldField;
+    }
+
+    private String getNewFieldIfValid(String oldField, String newField, PasswordEncoder passwordEncoder) {
+        return hasText(newField) && !passwordEncoder.matches(newField, oldField) ? passwordEncoder.encode(newField) : oldField;
+    }
+
+    public FollowRelationEntity followUser(UserEntity followee) {
+        FollowRelationEntity followRelation = new FollowRelationEntity(
+                new FollowRelationId(followee.getId(), id),
+                followee,
+                this
+        );
+        followee.toBuilder().follower(followRelation).build();
+        return followRelation;
     }
 
     public CommentEntity writeComment(String body, ArticleEntity article, ArticleRepository articleRepository) {

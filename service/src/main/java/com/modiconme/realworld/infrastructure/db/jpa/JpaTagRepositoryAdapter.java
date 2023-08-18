@@ -1,9 +1,7 @@
 package com.modiconme.realworld.infrastructure.db.jpa;
 
 import com.modiconme.realworld.domain.model.TagEntity;
-import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.TagRepository;
-import com.modiconme.realworld.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +15,7 @@ public class JpaTagRepositoryAdapter implements TagRepository {
     private final DataTagRepository repository;
 
     @Override
-    public Iterable<TagEntity> findAll() {
+    public List<TagEntity> findAll() {
         return repository.findAll();
     }
 

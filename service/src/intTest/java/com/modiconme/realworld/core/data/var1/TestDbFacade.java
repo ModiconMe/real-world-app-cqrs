@@ -1,4 +1,4 @@
-package com.modiconme.realworld.core;
+package com.modiconme.realworld.core.data.var1;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -24,17 +24,5 @@ public class TestDbFacade {
 
     public <T> T persisted(T entity) {
         return transactionTemplate.execute((status -> testEntityManager.persistAndFlush(entity)));
-    }
-
-    public <T> T merge(T entity) {
-        return transactionTemplate.execute((status -> testEntityManager.merge(entity)));
-    }
-
-    public <T> TestDataBuilder<T> persisted(TestDataBuilder<T> builder) {
-        return () -> transactionTemplate.execute(status -> {
-            final var entity = builder.build();
-            testEntityManager.persistAndFlush(entity);
-            return entity;
-        });
     }
 }

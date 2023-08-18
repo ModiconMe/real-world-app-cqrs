@@ -4,21 +4,18 @@ import com.modiconme.realworld.application.UserMapper;
 import com.modiconme.realworld.command.UpdateUser;
 import com.modiconme.realworld.command.UpdateUserResult;
 import com.modiconme.realworld.cqrs.CommandHandler;
-import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.UserRepository;
+import com.modiconme.realworld.dto.UserDto;
 import com.modiconme.realworld.infrastructure.security.AppUserDetails;
 import com.modiconme.realworld.infrastructure.security.jwt.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.ZonedDateTime;
-import java.util.Optional;
-
-import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.notFound;
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.unprocessableEntity;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,37 +29,20 @@ public class UpdateUserHandler implements CommandHandler<UpdateUserResult, Updat
     @Override
     @Transactional
     public UpdateUserResult handle(UpdateUser cmd) {
-        // check that current user exist in db
-        String currentUsername = cmd.getCurrentUsername();
-        UserEntity user = userRepository.findByUsername(currentUsername)
-                .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", currentUsername));
+        log.info("Start: update user: [request='{}']", cmd);
 
-        // check username duplicate
-        String username = cmd.getUsername();
-        Optional<UserEntity> byUsername = userRepository.findByUsername(username);
-        if (byUsername.isPresent() && byUsername.get().getId() != user.getId())
-            throw exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with username [%s] is already exists", username);
+        if (userRepository.findByEmailOrUsername(cmd.getEmail(), cmd.getUsername()).stream()
+                .anyMatch(u -> u.getId() != cmd.getUserId())) {
+            throw unprocessableEntity("User is already exists");
+        }
 
-        // check email duplicate
-        String email = cmd.getEmail();
-        Optional<UserEntity> byEmail = userRepository.findByEmail(email);
-        if (byEmail.isPresent() && byEmail.get().getId() != user.getId())
-            throw exception(HttpStatus.UNPROCESSABLE_ENTITY, "user with email [%s] is already exists", email);
+        UserDto user = userRepository.findById(cmd.getUserId())
+                .map(u -> u.updateUser(cmd, passwordEncoder))
+                .map(u -> UserMapper.mapToDto(u, jwtUtils.generateAccessToken(AppUserDetails.fromUser(u))))
+                .orElseThrow(() -> notFound("User not found"));
 
-        // create user
-        UserEntity newUser = user.toBuilder()
-                .email(cmd.getEmail() != null ? cmd.getEmail() : user.getEmail())
-                .username(cmd.getUsername() != null ? cmd.getUsername() : user.getUsername())
-                .password(cmd.getPassword() != null ? passwordEncoder.encode(cmd.getPassword()) : user.getPassword())
-                .image(cmd.getImage() != null ? cmd.getImage() : user.getImage())
-                .bio(cmd.getBio() != null ? cmd.getBio() : user.getBio())
-                .updatedAt(ZonedDateTime.now())
-                .build();
-        userRepository.save(newUser);
-        log.info("updated user {}, to new user {}", user, newUser);
-
-
-        return new UpdateUserResult(UserMapper.mapToDto(newUser, jwtUtils.generateAccessToken(AppUserDetails.fromUser(user))));
+        log.info("End: update user: [user='{}']", user);
+        return new UpdateUserResult(user);
     }
 
 }

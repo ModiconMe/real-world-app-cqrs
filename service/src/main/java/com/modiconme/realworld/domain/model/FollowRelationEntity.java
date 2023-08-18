@@ -17,12 +17,12 @@ public class FollowRelationEntity {
     @EmbeddedId
     private FollowRelationId id = new FollowRelationId();
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name="id_followee", nullable = false, foreignKey = @ForeignKey(name = "id_followee_fk"))
     @MapsId("idFollowee")
     private UserEntity followee;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne
     @JoinColumn(name="id_follower", nullable = false, foreignKey = @ForeignKey(name = "id_follower_fk"))
     @MapsId("idFollower")
     private UserEntity follower;

@@ -60,14 +60,14 @@ public class ArticleEntity {
         private UserEntity author;
 
         @Singular
-        @OneToMany(cascade = CascadeType.ALL)
+        @OneToMany(cascade = CascadeType.MERGE)
         @JoinColumn(name = "id_article", referencedColumnName = "id", nullable = false,
                 foreignKey = @ForeignKey(name = "article_id_comment_id_fk")
         )
         private Set<CommentEntity> comments;
 
         @Singular
-        @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+        @ManyToMany(cascade = {CascadeType.MERGE})
         @JoinTable(
                 name = "article_article_tag",
                 joinColumns = @JoinColumn(name = "id_article"),

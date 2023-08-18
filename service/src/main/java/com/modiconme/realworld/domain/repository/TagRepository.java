@@ -2,12 +2,12 @@ package com.modiconme.realworld.domain.repository;
 
 import com.modiconme.realworld.domain.model.TagEntity;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public interface TagRepository {
 
-    Iterable<TagEntity> findAll();
+    List<TagEntity> findAll();
 
     Optional<TagEntity> findByTagName(String name);
 

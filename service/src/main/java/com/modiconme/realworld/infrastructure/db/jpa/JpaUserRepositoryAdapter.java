@@ -5,6 +5,7 @@ import com.modiconme.realworld.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -14,8 +15,18 @@ public class JpaUserRepositoryAdapter implements UserRepository {
     private final DataUserRepository repository;
 
     @Override
+    public List<UserEntity> findByEmailOrUsername(String email, String username) {
+        return repository.findByEmailOrUsername(email, username);
+    }
+
+    @Override
     public Optional<UserEntity> findByEmail(String email) {
         return repository.findByEmail(email);
+    }
+
+    @Override
+    public Optional<UserEntity> findById(long id) {
+        return repository.findById(id);
     }
 
     @Override

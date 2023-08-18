@@ -1,6 +1,7 @@
 package com.modiconme.realworld.infrastructure.security;
 
 import com.modiconme.realworld.domain.model.UserEntity;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +15,8 @@ public class AppUserDetails implements UserDetails {
     @Serial
     private static final long serialVersionUID = -7745847682848118234L;
 
+    @Getter
+    private final long userId;
     private final String email;
     private final String password;
 
@@ -53,7 +56,7 @@ public class AppUserDetails implements UserDetails {
     }
 
     public static AppUserDetails fromUser(UserEntity user) {
-        return new AppUserDetails(user.getEmail(), user.getPassword());
+        return new AppUserDetails(user.getId(), user.getEmail(), user.getPassword());
     }
 
 }

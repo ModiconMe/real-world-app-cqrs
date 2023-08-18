@@ -7,7 +7,8 @@ import com.modiconme.realworld.operation.UserOperations;
 import com.modiconme.realworld.query.GetCurrentUser;
 import com.modiconme.realworld.query.GetCurrentUserResult;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -34,7 +35,7 @@ public class UserController implements UserOperations {
 
     @Override
     public UpdateUserResult updateUser(UpdateUser command) {
-        return bus.executeCommand(command.withCurrentUsername(authService.getCurrentUsername()));
+        return bus.executeCommand(command.withUserId(authService.getUserId()));
     }
 
 }

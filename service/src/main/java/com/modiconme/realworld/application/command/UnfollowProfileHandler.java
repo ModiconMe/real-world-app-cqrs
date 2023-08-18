@@ -1,22 +1,15 @@
 package com.modiconme.realworld.application.command;
 
 import com.modiconme.realworld.application.ProfileMapper;
-import com.modiconme.realworld.command.FollowProfile;
-import com.modiconme.realworld.command.FollowProfileResult;
 import com.modiconme.realworld.command.UnfollowProfile;
 import com.modiconme.realworld.command.UnfollowProfileResult;
 import com.modiconme.realworld.cqrs.CommandHandler;
-import com.modiconme.realworld.domain.model.FollowRelationEntity;
-import com.modiconme.realworld.domain.model.FollowRelationId;
 import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.exception;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,27 +21,15 @@ public class UnfollowProfileHandler implements CommandHandler<UnfollowProfileRes
     @Override
     @Transactional
     public UnfollowProfileResult handle(UnfollowProfile cmd) {
-        // find profile to unfollow (followee)
-        String profileUsername = cmd.getProfileUsername();
-        UserEntity profile = userRepository.findByUsername(profileUsername)
-                .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "profile with username [%s] is not found", profileUsername));
 
-        // find user profile (follower)
-        String userUsername = cmd.getUserUsername();
-        UserEntity user = userRepository.findByUsername(profileUsername)
-                .orElseThrow(() -> exception(HttpStatus.NOT_FOUND, "user with username [%s] is not found", userUsername));
 
-        // unfollow
-        FollowRelationEntity followRelation = FollowRelationEntity.builder()
-                .id(new FollowRelationId(user.getId(), profile.getId()))
-                .follower(user)
-                .followee(profile)
-                .build();
-        profile.getFollowers().removeIf(follower -> follower.equals(followRelation));
-        userRepository.save(profile);
-        log.info("user {} unfollow profile {}", user, profile);
+        UserEntity followee = UserEntity.getExistedUserOrThrow(cmd.getProfileUsername(), userRepository);
+        UserEntity follower = UserEntity.getExistedUserOrThrow(cmd.getUserUsername(), userRepository);
 
-        return new UnfollowProfileResult(ProfileMapper.mapToDto(profile, user));
+        followee.getFollowers().removeIf(f -> f.getId().getIdFollower() == follower.getId());
+        userRepository.save(followee);
+
+        return new UnfollowProfileResult(ProfileMapper.mapToDto(followee, follower));
     }
 
 }
