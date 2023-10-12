@@ -31,7 +31,7 @@ public class LoginUserHandler implements CommandHandler<LoginUserResult, LoginUs
         log.info("Start: login user: [request='{}']", cmd);
 
         UserDto user = userRepository.findByEmail(cmd.getEmail())
-                .filter(u -> !passwordEncoder.matches(cmd.getPassword(), u.getPassword()))
+                .filter(u -> passwordEncoder.matches(cmd.getPassword(), u.getPassword()))
                 .map(u -> UserMapper.mapToDto(u, jwtUtils.generateAccessToken(AppUserDetails.fromUser(u))))
                 .orElseThrow(() -> notFound("User not found"));
 

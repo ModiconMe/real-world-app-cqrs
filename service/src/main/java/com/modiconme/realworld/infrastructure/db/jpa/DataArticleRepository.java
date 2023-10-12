@@ -1,8 +1,6 @@
 package com.modiconme.realworld.infrastructure.db.jpa;
 
 import com.modiconme.realworld.domain.model.ArticleEntity;
-import com.modiconme.realworld.domain.model.FollowRelationEntity;
-import com.modiconme.realworld.domain.model.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -18,14 +16,14 @@ public interface DataArticleRepository extends CrudRepository<ArticleEntity, UUI
 
     Optional<ArticleEntity> findBySlugIgnoreCase(String slug);
 
-    @Query("SELECT DISTINCT ar FROM ArticleEntity ar " +
-            "LEFT JOIN ar.author a " +
-            "LEFT JOIN ar.tags t " +
-            "LEFT JOIN ar.favoriteList f " +
-            "WHERE " +
-            "(:author IS NULL OR a.username = :author) AND " +
-            "(:tag IS NULL OR t.tagName = :tag) AND " +
-            "(:favoritedBy IS NULL OR f.username = :favoritedBy)")
+    @Query("""
+            SELECT DISTINCT ar FROM ArticleEntity ar
+                   LEFT JOIN ar.author a
+                   LEFT JOIN ar.tags t
+                   LEFT JOIN ar.favoriteList f
+             WHERE (:author IS NULL OR a.username = :author)
+               AND (:tag IS NULL OR t.tagName = :tag)
+               AND (:favoritedBy IS NULL OR f.username = :favoritedBy)""")
     List<ArticleEntity> findByFilter(
             @Param("tag") String tag,
             @Param("author") String author,

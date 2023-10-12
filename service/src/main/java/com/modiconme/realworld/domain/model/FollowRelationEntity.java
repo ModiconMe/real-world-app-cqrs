@@ -6,7 +6,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-//@EqualsAndHashCode(exclude = "id")
+@EqualsAndHashCode(exclude = "id")
 @ToString
 @Getter
 @Setter

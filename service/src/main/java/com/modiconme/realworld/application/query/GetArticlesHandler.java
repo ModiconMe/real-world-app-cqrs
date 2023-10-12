@@ -6,6 +6,7 @@ import com.modiconme.realworld.domain.model.ArticleEntity;
 import com.modiconme.realworld.domain.model.UserEntity;
 import com.modiconme.realworld.domain.repository.ArticleRepository;
 import com.modiconme.realworld.domain.repository.UserRepository;
+import com.modiconme.realworld.dto.ArticleDto;
 import com.modiconme.realworld.query.GetArticles;
 import com.modiconme.realworld.query.GetArticlesResult;
 import lombok.RequiredArgsConstructor;
@@ -34,12 +35,14 @@ public class GetArticlesHandler implements QueryHandler<GetArticlesResult, GetAr
                 query.getOffset(),
                 query.getLimit()
         );
-
+        
         articles.forEach(a -> a.setTags(new TreeSet<>(a.getTags())));
 
         UserEntity user = userRepository.findByUsername(query.getCurrentUsername()).orElse(null);
 
-        return new GetArticlesResult(articles.stream().map(a -> ArticleMapper.mapToDto(a, user)).toList(), articles.size());
+        List<ArticleDto> res = articles.stream()
+                .map(a -> ArticleMapper.mapToDto(a, user)).toList();
+        return new GetArticlesResult(res, articles.size());
     }
 
 }

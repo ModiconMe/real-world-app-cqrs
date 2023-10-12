@@ -12,6 +12,7 @@ dependencies {
     implementation libs.plugin.spring.dependencyManagement
     implementation libs.plugin.docker
     implementation libs.plugin.lombok
+    implementation libs.plugin.querydsl
 }
 
 // https://docs.gradle.org/current/samples/sample_convention_plugins.html

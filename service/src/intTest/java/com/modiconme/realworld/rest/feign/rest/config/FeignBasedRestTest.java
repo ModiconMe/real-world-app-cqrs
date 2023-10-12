@@ -4,6 +4,7 @@ import com.modiconme.realworld.rest.feign.client.UserClient;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.BeforeAll;
+import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Import;
@@ -16,6 +17,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EnableFeignClients(basePackageClasses = UserClient.class)
+@AutoConfigureTestEntityManager
 @TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
 @Import(ServerPortCustomizer.class)
 @ActiveProfiles("test")

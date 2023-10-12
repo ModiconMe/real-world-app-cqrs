@@ -1,7 +1,10 @@
 package com.modiconme.realworld.operation;
 
 import com.modiconme.realworld.command.*;
-import com.modiconme.realworld.query.*;
+import com.modiconme.realworld.query.GetArticleResult;
+import com.modiconme.realworld.query.GetArticlesResult;
+import com.modiconme.realworld.query.GetCommentsResult;
+import com.modiconme.realworld.query.GetFeedResult;
 import org.springframework.web.bind.annotation.*;
 
 public interface ArticleOperations {
@@ -23,7 +26,6 @@ public interface ArticleOperations {
 
     @GetMapping("/articles/{slug}")
     GetArticleResult getArticle(@PathVariable("slug") String slug);
-
 
     @PostMapping("/articles")
     CreateArticleResult createArticle(@RequestBody CreateArticle command);

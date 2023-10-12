@@ -11,6 +11,7 @@ import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static com.modiconme.realworld.core.data.var2.GenericBuilder.NOT_EXIST;
 import static com.modiconme.realworld.core.data.var2.GenericBuilderDsl.given;
@@ -24,11 +25,11 @@ public class UserLoginHandlerTest extends BaseTest {
     private final LoginUserHandler handler;
 
     @Test
-    void shouldLoginUser(@Autowired JwtUtils jwtUtils) {
+    void shouldLoginUser(@Autowired JwtUtils jwtUtils, @Autowired PasswordEncoder passwordEncoder) {
         // given
-        UserEntity user = given(user());
+        UserEntity user = given(user().password(passwordEncoder.encode("password")));
         db.persisted(user);
-        LoginUser request = new LoginUser(user.getEmail(), user.getPassword());
+        LoginUser request = new LoginUser(user.getEmail(), "password");
 
         // when
         UserDto response = handler.handle(request).getUser();

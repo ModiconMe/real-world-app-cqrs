@@ -44,3 +44,4 @@ plugin-spring-dependencyManagement = { module = 'io.spring.gradle:dependency-man
 plugin-spring-boot = { module = 'org.springframework.boot:spring-boot-gradle-plugin', version.ref = 'spring-boot' }
 plugin-docker = 'com.bmuschko.docker-spring-boot-application:com.bmuschko.docker-spring-boot-application.gradle.plugin:9.3.1'
 plugin-lombok = 'io.freefair.gradle:lombok-plugin:8.0.1'
+plugin-querydsl = 'gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10'
