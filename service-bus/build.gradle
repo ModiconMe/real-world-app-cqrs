@@ -1,6 +1,7 @@
 plugins {
-    id 'java-conventions'
-    id 'spring-conventions'
+    id 'com.modiconme.gradle.plugins.modiconme-java'
+    id 'com.modiconme.gradle.plugins.modiconme-spring-boot'
+    id 'com.modiconme.gradle.plugins.modiconme-spring-boot-dependency-management'
 }
 
 dependencies {

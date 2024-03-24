@@ -52,8 +52,9 @@ public class CreateArticleHandler implements CommandHandler<CreateArticleResult,
         List<TagEntity> tags = new ArrayList<>();
         if (cmd.getTagList() != null) {
             tags = cmd.getTagList().stream()
-                    .map((t) -> tagRepository.findByTagName(t).orElseGet(() -> new TagEntity(t)))
-                    .collect(Collectors.toList());
+                    .map(t -> tagRepository.findByTagName(t)
+                            .orElseGet(() -> tagRepository.save(new TagEntity(t))))
+                    .toList();
         }
 
         ArticleEntity article = ArticleEntity.builder()

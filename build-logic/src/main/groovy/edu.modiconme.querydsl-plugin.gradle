@@ -1,0 +1,23 @@
+project.plugins.apply('com.ewerk.gradle.plugins.querydsl')
+
+configurations {
+    querydsl.extendsFrom annotationProcessor, implementation, compilyOnly, runtimeOnly
+}
+
+dependencies {
+
+    implementation 'com.querydsl:querydsl-core'
+    implementation 'com.querydsl:querydsl-jpa'
+    annotationProcessor 'com.querydsl:querydsl-apt'
+}
+
+project.querydsl {
+    jpa = true
+    library = "com.querydsl:querydsl-apt:5.0.0"
+    querydslSourcesDir = "$buildDir/generated/sources/annotationProcessor/java/main"
+}
+project.initQuerydslSourcesDir.dependsOn clean
+
+project.compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}

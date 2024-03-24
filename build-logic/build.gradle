@@ -1,0 +1,66 @@
+plugins {
+    id("groovy-gradle-plugin")
+    id("java-gradle-plugin")
+    id("groovy")
+    id("maven-publish") // if you never publish the plugin, you may remove this (but it also does not hurt)
+}
+
+dependencies {
+    implementation 'com.palantir.gradle.shadow-jar:gradle-shadow-jar:3.0.0'
+    implementation 'com.jfrog.artifactory:com.jfrog.artifactory.gradle.plugin:5.1.14'
+    implementation libs.plugin.spring.boot
+    implementation libs.plugin.spring.dependencyManagement
+    implementation libs.plugin.docker
+    implementation libs.plugin.lombok
+    implementation libs.plugin.querydsl
+
+}
+
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+}
+
+group = 'com.modiconme.gradle.plugins'
+version = "1.0"
+
+gradlePlugin {
+    plugins {
+        create('ModiconMeJavaPlugin') {
+            id = "${project.group}.modiconme-java"
+            implementationClass = "${project.group}.${name}"
+        }
+        create('ModiconMeGroovyPlugin') {
+            id = "${project.group}.modiconme-groovy"
+            implementationClass = "${project.group}.${name}"
+        }
+        create('ModiconMeSpringBootPlugin') {
+            id = "${project.group}.modiconme-spring-boot"
+            implementationClass = "${project.group}.${name}"
+        }
+        create('ModiconMeSpringBootDependencyManagementPlugin') {
+            id = "${project.group}.modiconme-spring-boot-dependency-management"
+            implementationClass = "${project.group}.${name}"
+        }
+        create('ModiconMeTestUnitPlugin') {
+            id = "${project.group}.modiconme-base-test"
+            implementationClass = "${project.group}.${name}"
+        }
+        create('ModiconMeTestIntegrationPlugin') {
+            id = "${project.group}.modiconme-integration-test"
+            implementationClass = "${project.group}.${name}"
+        }
+        create('ModiconMePublishPlugin') {
+            id = "${project.group}.modiconme-publish"
+            implementationClass = "${project.group}.${name}"
+        }
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+}

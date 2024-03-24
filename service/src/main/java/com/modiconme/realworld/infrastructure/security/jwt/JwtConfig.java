@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class JwtConfig {
 
-    @Value("${jwt.sing-key}")
+    @Value("${jwt.sign-key}")
     private String singKey;
 
     @Value("${jwt.token-prefix}")

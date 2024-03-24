@@ -1,0 +1,13 @@
+plugins {
+    id 'java-library'
+    id 'io.freefair.lombok'
+}
+
+java {
+    sourceCompatibility = 17
+    targetCompatibility = 17
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}

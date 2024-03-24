@@ -1,42 +1,35 @@
 plugins {
-    id 'java-conventions'
-    id 'spring-conventions'
-    id 'docker-conventions'
-    id 'intTest-conventions'
+    id 'com.modiconme.gradle.plugins.modiconme-java'
+    id 'com.modiconme.gradle.plugins.modiconme-spring-boot'
+    id 'com.modiconme.gradle.plugins.modiconme-spring-boot-dependency-management'
+    id 'com.modiconme.gradle.plugins.modiconme-base-test'
+    id 'com.modiconme.gradle.plugins.modiconme-integration-test'
+    id 'jacoco-report-aggregation'
 }
 
 dependencies {
     implementation project(':service-bus')
     implementation project(':service-api')
-
     implementation libs.spring.web
     implementation libs.spring.validation
     implementation libs.spring.jpa
-
     implementation libs.spring.security
     implementation libs.jwt.api
     runtimeOnly libs.jwt.impl
     runtimeOnly libs.jwt.jackson
-
     runtimeOnly libs.postgreSQL
-
     implementation libs.liquebase
     implementation libs.openApi
-}
 
-dependencies {
     testImplementation libs.testcontainers
     testImplementation libs.spring.test
-
     testImplementation libs.openfeign
     testImplementation libs.openfeign.jackson
+
+    iTestImplementation libs.faker
+    iTestImplementation libs.testcontainers
+    iTestImplementation libs.spring.test
+    iTestImplementation libs.openfeign
+    iTestImplementation libs.openfeign.jackson
 }
 
-dependencies {
-    intTestImplementation libs.faker
-    intTestImplementation libs.testcontainers
-    intTestImplementation libs.spring.test
-
-    intTestImplementation libs.openfeign
-    intTestImplementation libs.openfeign.jackson
-}

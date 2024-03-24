@@ -1,9 +1,21 @@
+plugins {
+    id 'com.modiconme.gradle.plugins.modiconme-java'
+}
+
 allprojects {
-    group 'edu.modicon.app'
+    group 'com.modiconme.realworld'
 
     repositories {
         mavenCentral()
     }
 }
+
+def mainBuildGroup = "main build"
+tasks.named("build") {
+    group = mainBuildGroup
+    description = "Complete build of all modules and the application"
+    dependsOn subprojects.stream().map { ":${it.name}:$name" }.toList()
+}
+
 
 // https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/

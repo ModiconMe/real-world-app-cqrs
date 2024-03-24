@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.notFound;
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.unauthorized;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -33,7 +34,7 @@ public class LoginUserHandler implements CommandHandler<LoginUserResult, LoginUs
         UserDto user = userRepository.findByEmail(cmd.getEmail())
                 .filter(u -> passwordEncoder.matches(cmd.getPassword(), u.getPassword()))
                 .map(u -> UserMapper.mapToDto(u, jwtUtils.generateAccessToken(AppUserDetails.fromUser(u))))
-                .orElseThrow(() -> notFound("User not found"));
+                .orElseThrow(() -> unauthorized("Wrong credentials"));
 
         log.info("End: login user [user='{}']", user);
         return new LoginUserResult(user);

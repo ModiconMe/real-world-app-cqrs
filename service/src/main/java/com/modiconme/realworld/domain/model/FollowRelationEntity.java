@@ -15,7 +15,7 @@ import lombok.*;
 public class FollowRelationEntity {
 
     @EmbeddedId
-    private FollowRelationId id = new FollowRelationId();
+    private FollowRelationId id;
 
     @ManyToOne
     @JoinColumn(name="id_followee", nullable = false, foreignKey = @ForeignKey(name = "id_followee_fk"))

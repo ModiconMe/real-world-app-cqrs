@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: saeed
-    password: root
+    username: ${POSTGRES_USER}
+    url: ${POSTGRES_URL}
+    password: ${POSTGRES_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -22,7 +22,7 @@ logging:
     root: info
 
 jwt:
-  sign-key: secret-secret-secret-secret-secret-secret # at least 32 character
+  sign-key: ${JWT_SECRET} # at least 32 character
   token-prefix: Token
   valid-time: 24 # hours
   issuer: app
