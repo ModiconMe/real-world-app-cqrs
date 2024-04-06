@@ -41,7 +41,9 @@ services:
     restart: unless-stopped
     deploy:
       mode: replicated
-      replicas: 2
+      replicas: 1
+    volumes:
+      - app-logs:/application/logs
 
   postgres:
     image: postgres
@@ -61,3 +63,6 @@ services:
 networks:
   backend-app-network:
     driver: bridge
+
+volumes:
+  app-logs:
