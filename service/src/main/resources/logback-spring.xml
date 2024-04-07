@@ -10,7 +10,7 @@
         </layout>
     </appender>
 
-    <property name="LOGS" value="./logs"/>
+    <property name="LOGS" value="logs"/>
     <appender name="RollingFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOGS}/spring-boot-logger.log</file>
