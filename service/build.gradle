@@ -21,6 +21,8 @@ dependencies {
     implementation libs.liquebase
     implementation libs.openApi
 
+    implementation 'org.javatuples:javatuples:1.2'
+
     testImplementation libs.testcontainers
     testImplementation libs.spring.test
     testImplementation libs.openfeign

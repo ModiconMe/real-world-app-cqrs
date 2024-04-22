@@ -1,6 +1,6 @@
 package com.modiconme.realworld.infrastructure.security;
 
-import com.modiconme.realworld.domain.model.UserEntity;
+import com.modiconme.realworld.domain.common.UserEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

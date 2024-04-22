@@ -1,6 +1,6 @@
 package com.modiconme.realworld.infrastructure.security;
 
-import com.modiconme.realworld.domain.repository.UserRepository;
+import com.modiconme.realworld.domain.registeruser.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,9 +15,10 @@ public class AccountDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username)
-                .map(AppUserDetails::fromUser)
-                .orElse(null);
+//        return userRepository.findByEmail(username)
+//                .map(AppUserDetails::fromUser)
+//                .orElse(null);
+        return null;
     }
 
 }

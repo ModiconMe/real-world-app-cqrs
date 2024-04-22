@@ -9,7 +9,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        String[] allowedDomains = {"http://localhost:3000", "http://localhost:4200", "http://localhost:8080", "http://angular-real-app:80", "http://angular-real-app"};
+        String[] allowedDomains = {"http://localhost:3000", "http://localhost:4200",
+                "http://localhost:8080", "http://angular-real-app:80", "http://angular-real-app"};
         registry.addMapping("/**")
                 .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH")
                 .allowedOrigins(allowedDomains);
