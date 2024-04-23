@@ -13,9 +13,11 @@ spring:
         format_sql: true
     show-sql: false
 
-  jackson:
-    deserialization:
-      unwrap_root_value: true
+#  jackson:
+#    deserialization:
+#      unwrap_root_value: true
+#    serialization:
+#      wrap_root_value: true
 
 logging:
   level:

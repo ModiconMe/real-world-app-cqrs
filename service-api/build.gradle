@@ -10,7 +10,7 @@ dependencies {
     implementation libs.openfeign.jackson.annotations
     implementation libs.validation.api
     implementation libs.spring.web
-    implementation libs.spring.security
+//    implementation libs.spring.security
 }
 
 tasks {

@@ -1,4 +1,4 @@
-package com.modiconme.realworld.base;
+package com.modiconme.realworld.it.base;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;

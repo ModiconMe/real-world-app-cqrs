@@ -20,7 +20,7 @@ public final class Password implements ValueObject<String> {
         return Result.success(new Password(value));
     }
 
-    private static final int PASSWORD_MAX_LENGTH = 128;
+    private static final int PASSWORD_MAX_LENGTH = 64;
 
     private static boolean isInvalidUsername(String value) {
         return !StringUtils.hasText(value) || value.length() > PASSWORD_MAX_LENGTH;

@@ -13,7 +13,8 @@ dependencies {
     implementation libs.spring.web
     implementation libs.spring.validation
     implementation libs.spring.jpa
-    implementation libs.spring.security
+//    implementation libs.spring.security
+
     implementation libs.jwt.api
     runtimeOnly libs.jwt.impl
     runtimeOnly libs.jwt.jackson

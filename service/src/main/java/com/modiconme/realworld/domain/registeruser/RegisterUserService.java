@@ -21,10 +21,7 @@ public class RegisterUserService {
 
     private Result<ValidatedRegisterUserRequest> checkEmailExist(ValidatedRegisterUserRequest it) {
         Result<Boolean> existByEmail = userRepository.existByEmail(it.getEmail().getValue());
-        if (existByEmail.isFailure()) {
-            return Result.failure(existByEmail.getError());
-        }
-        return Result.success(it);
+        return existByEmail.isFailure() ? Result.failure(existByEmail.getError()) : Result.success(it);
     }
 
     private UserEntity saveUser(ValidatedRegisterUserRequest it) {

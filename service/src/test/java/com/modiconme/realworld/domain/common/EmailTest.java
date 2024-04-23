@@ -6,21 +6,24 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EmailTest {
 
     @ParameterizedTest
     @MethodSource
     void success(String email) {
-        assertDoesNotThrow(() -> Email.emerge(email));
+        Result<Email> result = Email.emerge(email);
+        assertTrue(result.isSuccess());
+        assertEquals(email, result.getData().getValue());
     }
 
     @ParameterizedTest
     @MethodSource
     void failure(String email) {
-        assertThrows(IllegalArgumentException.class, () -> Email.emerge(email), "Invalid email");
+        Result<Email> result = Email.emerge(email);
+        assertFalse(result.isSuccess());
+        assertEquals("Invalid email: '%s'".formatted(email), result.getError().getMessage());
     }
 
     static Stream<Arguments> success() {

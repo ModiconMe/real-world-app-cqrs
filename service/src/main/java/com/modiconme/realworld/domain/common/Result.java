@@ -2,6 +2,7 @@ package com.modiconme.realworld.domain.common;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
+import org.javatuples.Pair;
 import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
@@ -21,6 +22,21 @@ public class Result<T> {
 
     public static <T> Result<T> failure(Throwable error) {
         return new Result<>(null, error);
+    }
+
+    public static <A, B> Result<Pair<A, B>> zip(
+            Result<A> a, Result<B> b
+    ) {
+        if (Stream.of(a, b).noneMatch(Result::isFailure)) {
+            Pair<A, B> with = Pair.with(a.data, b.data);
+            return success(with);
+        } else {
+            Result<?> result = Stream.of(a, b)
+                    .filter(Result::isFailure)
+                    .findFirst()
+                    .orElseThrow();
+            return failure(result.getError());
+        }
     }
 
     public static <A, B, C> Result<Triplet<A, B, C>> zip(

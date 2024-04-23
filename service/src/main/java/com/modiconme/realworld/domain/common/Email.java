@@ -24,7 +24,7 @@ public final class Email implements ValueObject<String> {
     }
 
     private static final String EMAIL_PATTERN = "^[a-zA-Z]\\w+@\\w+(\\.org|\\.com|\\.ru)$";
-    private static final int EMAIL_MAX_LENGTH = 128;
+    private static final int EMAIL_MAX_LENGTH = 64;
 
     private static boolean isInvalidEmail(String email) {
         return email == null || !email.matches(EMAIL_PATTERN) || email.length() > EMAIL_MAX_LENGTH;

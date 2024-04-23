@@ -21,7 +21,7 @@ public final class Username implements ValueObject<String> {
         return Result.success(new Username(value));
     }
 
-    private static final int USERNAME_MAX_LENGTH = 128;
+    private static final int USERNAME_MAX_LENGTH = 64;
 
     private static boolean isInvalidUsername(String value) {
         return !StringUtils.hasText(value) || value.length() > USERNAME_MAX_LENGTH;

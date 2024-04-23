@@ -9,28 +9,28 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UsernameTest {
+class PasswordTest {
 
     @ParameterizedTest
     @MethodSource
-    void success(String username) {
-        Result<Username> result = Username.emerge(username);
+    void success(String password) {
+        Result<Password> result = Password.emerge(password);
         assertTrue(result.isSuccess());
-        assertEquals(username, result.getData().getValue());
+        assertEquals(password, result.getData().getValue());
     }
 
     @ParameterizedTest
     @MethodSource
     @NullSource
-    void failure(String username) {
-        Result<Username> result = Username.emerge(username);
+    void failure(String password) {
+        Result<Password> result = Password.emerge(password);
         assertFalse(result.isSuccess());
-        assertEquals("Invalid username: '%s'".formatted(username), result.getError().getMessage());
+        assertEquals("Invalid password: '%s'".formatted(password), result.getError().getMessage());
     }
 
     static Stream<Arguments> success() {
         return Stream.of(
-                Arguments.of("username")
+                Arguments.of("password")
         );
     }
 

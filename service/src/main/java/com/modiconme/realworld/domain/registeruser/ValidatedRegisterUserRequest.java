@@ -19,19 +19,19 @@ public final class ValidatedRegisterUserRequest {
 
     public static Result<ValidatedRegisterUserRequest> emerge(UnvalidatedRegisterUserRequest unvalidatedRequest) {
         return wrapPrimitivesToValueObjects(unvalidatedRequest)
-                .map(ValidatedRegisterUserRequest::tuple4ToValidatedRegisterUserRequest);
+                .map(ValidatedRegisterUserRequest::tupleToValidatedRegisterUserRequest);
     }
 
-    private static ValidatedRegisterUserRequest tuple4ToValidatedRegisterUserRequest(Triplet<Email, Username, Password> tuple3) {
-        return new ValidatedRegisterUserRequest(tuple3.getValue0(), tuple3.getValue1(), tuple3.getValue2());
+    private static ValidatedRegisterUserRequest tupleToValidatedRegisterUserRequest(Triplet<Email, Username, Password> tuple) {
+        return new ValidatedRegisterUserRequest(tuple.getValue0(), tuple.getValue1(), tuple.getValue2());
     }
 
     private static Result<Triplet<Email, Username, Password>> wrapPrimitivesToValueObjects(
             UnvalidatedRegisterUserRequest unvalidatedRequest) {
         return Result.zip(
-                Email.emerge(unvalidatedRequest.getEmail()),
-                Username.emerge(unvalidatedRequest.getUsername()),
-                Password.emerge(unvalidatedRequest.getPassword())
+                Email.emerge(unvalidatedRequest.email()),
+                Username.emerge(unvalidatedRequest.username()),
+                Password.emerge(unvalidatedRequest.password())
         );
     }
 }

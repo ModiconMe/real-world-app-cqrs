@@ -1,4 +1,4 @@
-package com.modiconme.realworld.base;
+package com.modiconme.realworld.it.base;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
