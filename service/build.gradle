@@ -13,7 +13,7 @@ dependencies {
     implementation libs.spring.web
     implementation libs.spring.validation
     implementation libs.spring.jpa
-//    implementation libs.spring.security
+    implementation libs.spring.security
 
     implementation libs.jwt.api
     runtimeOnly libs.jwt.impl
@@ -26,13 +26,13 @@ dependencies {
 
     testImplementation libs.testcontainers
     testImplementation libs.spring.test
-    testImplementation libs.openfeign
-    testImplementation libs.openfeign.jackson
+//    testImplementation libs.openfeign
+//    testImplementation libs.openfeign.jackson
 
-    iTestImplementation libs.faker
+//    iTestImplementation libs.faker
     iTestImplementation libs.testcontainers
     iTestImplementation libs.spring.test
-    iTestImplementation libs.openfeign
-    iTestImplementation libs.openfeign.jackson
+//    iTestImplementation libs.openfeign
+//    iTestImplementation libs.openfeign.jackson
 }
 

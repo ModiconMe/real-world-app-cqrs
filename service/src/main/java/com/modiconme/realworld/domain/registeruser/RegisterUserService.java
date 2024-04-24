@@ -1,7 +1,9 @@
 package com.modiconme.realworld.domain.registeruser;
 
+import com.modiconme.realworld.domain.common.PasswordEncoder;
 import com.modiconme.realworld.domain.common.Result;
 import com.modiconme.realworld.domain.common.UserEntity;
+import com.modiconme.realworld.domain.common.UserRepository;
 import com.modiconme.realworld.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,9 +13,10 @@ import org.springframework.stereotype.Service;
 public class RegisterUserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public Result<RegisterUserResponse> registerUser(UnvalidatedRegisterUserRequest command) {
-        return ValidatedRegisterUserRequest.emerge(command)
+        return ValidatedRegisterUserRequest.emerge(command, passwordEncoder)
                 .flatMap(this::checkEmailExist)
                 .map(this::saveUser)
                 .map(RegisterUserService::mapToRestResponse);

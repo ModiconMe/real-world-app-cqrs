@@ -28,7 +28,7 @@ class RegisterUserTest extends SpringIntegrationTest {
     void success() {
         var request = new HttpEntity<>(new RegisterUserRequest("user@mail.com", "username", "password"));
         ResponseEntity<RestResponse<RegisterUserResponse>> response = testRestTemplate.exchange(
-                "/api/users", HttpMethod.POST, request, new ParameterizedTypeReference<RestResponse<RegisterUserResponse>>() {
+                "/api/users", HttpMethod.POST, request, new ParameterizedTypeReference<>() {
                 });
 
         assertEquals(HttpStatus.OK, response.getStatusCode());

@@ -1,9 +1,6 @@
 package com.modiconme.realworld.domain.registeruser;
 
-import com.modiconme.realworld.domain.common.Email;
-import com.modiconme.realworld.domain.common.Password;
-import com.modiconme.realworld.domain.common.Result;
-import com.modiconme.realworld.domain.common.Username;
+import com.modiconme.realworld.domain.common.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.javatuples.Triplet;
@@ -17,7 +14,8 @@ public final class ValidatedRegisterUserRequest {
     private final Username username;
     private final Password password;
 
-    public static Result<ValidatedRegisterUserRequest> emerge(UnvalidatedRegisterUserRequest unvalidatedRequest) {
+    public static Result<ValidatedRegisterUserRequest> emerge(UnvalidatedRegisterUserRequest unvalidatedRequest,
+                                                              PasswordEncoder passwordEncoder) {
         return wrapPrimitivesToValueObjects(unvalidatedRequest)
                 .map(ValidatedRegisterUserRequest::tupleToValidatedRegisterUserRequest);
     }
