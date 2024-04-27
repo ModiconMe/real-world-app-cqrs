@@ -1,6 +1,5 @@
 package com.modiconme.realworld.domain.common;
 
-import com.modiconme.realworld.domain.registeruser.RegisterUserRequest;
 import com.modiconme.realworld.domain.registeruser.ValidatedRegisterUserRequest;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,8 +23,7 @@ public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    private Long id;
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
@@ -43,7 +41,7 @@ public class UserEntity {
     private ZonedDateTime updatedAt;
 
     public static UserEntity register(ValidatedRegisterUserRequest request) {
-        return new UserEntity(0, request.getEmail().getValue(), request.getPassword().getValue(),
+        return new UserEntity(null, request.getEmail().getValue(), request.getPassword().getValue(),
                 request.getUsername().getValue(), null, null, null, null);
     }
 }

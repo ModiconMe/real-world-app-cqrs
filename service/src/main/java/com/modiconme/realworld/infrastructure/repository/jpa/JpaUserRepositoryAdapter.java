@@ -37,4 +37,11 @@ public class JpaUserRepositoryAdapter implements UserRepository {
         return user.map(Result::success)
                 .orElseGet(() -> Result.failure(notFound("User with email %s not exists", email)));
     }
+
+    @Override
+    public Result<UserEntity> findByUsername(String username) {
+        Optional<UserEntity> user = repository.findByUsername(username);
+        return user.map(Result::success)
+                .orElseGet(() -> Result.failure(notFound("User with username %s not exists", username)));
+    }
 }

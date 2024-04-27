@@ -1,10 +1,10 @@
-package com.modiconme.realworld.it.loginuser;
+package com.modiconme.realworld.it.follow;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.modiconme.realworld.domain.common.Password;
 import com.modiconme.realworld.domain.common.PasswordEncoder;
 import com.modiconme.realworld.domain.common.UserEntity;
-import com.modiconme.realworld.domain.loginuser.LoginUserRequest;
+import com.modiconme.realworld.domain.followprofile.FollowProfileRequest;
 import com.modiconme.realworld.it.base.SpringIntegrationTest;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
-class MockMvcLoginUserTest extends SpringIntegrationTest {
+public class FollowUserTest extends SpringIntegrationTest {
 
     final MockMvc mockMvc;
     final ObjectMapper objectMapper;
@@ -28,25 +28,32 @@ class MockMvcLoginUserTest extends SpringIntegrationTest {
 
     @Test
     void success() throws Exception {
-        UserEntity user = UserEntity.builder()
+        UserEntity user1 = UserEntity.builder()
                 .email(uniqEmail())
                 .password(Password.emerge("password")
                         .flatMap(it -> it.encode(passwordEncoder)).getData().getValue())
                 .username(uniqString())
                 .build();
-        db.persisted(user);
+        db.persisted(user1);
+        UserEntity user2 = UserEntity.builder()
+                .email(uniqEmail())
+                .password(Password.emerge("password")
+                        .flatMap(it -> it.encode(passwordEncoder)).getData().getValue())
+                .username(uniqString())
+                .build();
+        db.persisted(user2);
 
-        var request = new LoginUserRequest(user.getEmail(), "password");
+        var request = new FollowProfileRequest(user1.getUsername(), user2.getUsername());
 
-        mockMvc.perform(post("/api/users/login")
+        mockMvc.perform(post("/api/profiles/follow")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.data.user.email").value(user.getEmail()))
-                .andExpect(jsonPath("$.data.user.username").value(user.getUsername()))
-                .andExpect(jsonPath("$.data.user.token").isEmpty())
-                .andExpect(jsonPath("$.data.user.bio").doesNotExist())
-                .andExpect(jsonPath("$.data.user.image").doesNotExist())
+                .andExpect(jsonPath("$.data.profile.username").value(user2.getUsername()))
+                .andExpect(jsonPath("$.data.profile.bio").doesNotExist())
+                .andExpect(jsonPath("$.data.profile.image").doesNotExist())
+                .andExpect(jsonPath("$.data.profile.following").isBoolean())
                 .andExpect(jsonPath("$.error").doesNotExist());
     }
+
 }

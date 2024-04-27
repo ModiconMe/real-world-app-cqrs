@@ -16,7 +16,7 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
     }
 
     @Override
-    public Password encode(Password password) {
-        return Password.emerge(passwordEncoder.encode(password.getValue())).getData();
+    public String encode(Password password) {
+        return passwordEncoder.encode(password.getValue());
     }
 }

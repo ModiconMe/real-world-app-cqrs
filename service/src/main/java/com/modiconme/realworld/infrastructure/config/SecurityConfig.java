@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .requestMatchers(AUTH_WHITELIST).permitAll()
                 .requestMatchers(HttpMethod.GET, "/*").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/users", "/api/users/login").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/profiles/follow").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/articles/feed").authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/articles", "/api/articles/**", "/api/tags", "/api/profiles/**").permitAll()
                 .anyRequest().authenticated()

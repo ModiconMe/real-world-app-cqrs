@@ -11,8 +11,8 @@ public class PlainTextPasswordEncoder implements PasswordEncoder {
     }
 
     @Override
-    public Password encode(Password password) {
-        return password;
+    public String encode(Password password) {
+        return password.getValue();
     }
 
 }

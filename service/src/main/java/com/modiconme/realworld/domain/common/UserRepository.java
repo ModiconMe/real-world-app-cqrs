@@ -6,4 +6,6 @@ public interface UserRepository {
     Result<UserEntity> save(UserEntity user);
     Result<UserEntity> findByEmail(String email);
 
+    Result<UserEntity> findByUsername(String username);
+
 }
