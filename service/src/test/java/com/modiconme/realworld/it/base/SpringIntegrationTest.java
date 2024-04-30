@@ -16,6 +16,8 @@ public abstract class SpringIntegrationTest {
 
     @Autowired
     protected TestDbFacade db;
+    @Autowired
+    protected TestAuthenticator authenticator;
 
     @BeforeAll
     static void runContainer() {

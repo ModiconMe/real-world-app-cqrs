@@ -5,6 +5,8 @@ import com.modiconme.realworld.domain.common.Result;
 import com.modiconme.realworld.domain.common.UserEntity;
 import com.modiconme.realworld.domain.common.UserRepository;
 import com.modiconme.realworld.dto.UserDto;
+import com.modiconme.realworld.infrastructure.security.AppUserDetails;
+import com.modiconme.realworld.infrastructure.security.jwt.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +16,13 @@ public class RegisterUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenService tokenService;
 
     public Result<RegisterUserResponse> registerUser(UnvalidatedRegisterUserRequest command) {
         return ValidatedRegisterUserRequest.emerge(command, passwordEncoder)
                 .flatMap(this::checkEmailExist)
                 .map(this::saveUser)
-                .map(RegisterUserService::mapToRestResponse);
+                .map(this::mapToRestResponse);
     }
 
     private Result<ValidatedRegisterUserRequest> checkEmailExist(ValidatedRegisterUserRequest it) {
@@ -31,7 +34,15 @@ public class RegisterUserService {
         return userRepository.save(UserEntity.register(it)).getData();
     }
 
-    private static RegisterUserResponse mapToRestResponse(UserEntity it) {
-        return new RegisterUserResponse(new UserDto(it.getEmail(), "", it.getUsername(), it.getBio(), it.getImage()));
+    private RegisterUserResponse mapToRestResponse(UserEntity it) {
+        return new RegisterUserResponse(
+                new UserDto(
+                        it.getEmail(),
+                        tokenService.getAccessToken(AppUserDetails.fromUser(it)),
+                        it.getUsername(),
+                        it.getBio(),
+                        it.getImage()
+                )
+        );
     }
 }

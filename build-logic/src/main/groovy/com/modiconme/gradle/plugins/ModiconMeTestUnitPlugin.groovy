@@ -22,8 +22,14 @@ class ModiconMeTestUnitPlugin implements Plugin<Project> {
             useJUnitPlatform()
             testLogging.showStackTraces = true
             testLogging.exceptionFormat = TestExceptionFormat.FULL
-            testLogging.events TestLogEvent.FAILED, TestLogEvent.SKIPPED
+            testLogging.events TestLogEvent.FAILED, TestLogEvent.SKIPPED, TestLogEvent.STANDARD_ERROR
             systemProperties.put('file.encoding', 'UTF-8')
+
+            systemProperty('junit.jupiter.execution.parallel.enabled', false)
+            systemProperty('junit.jupiter.execution.parallel.mode.default', 'concurrent')
+            systemProperty('junit.jupiter.execution.parallel.mode.classes.default', 'concurrent')
+            systemProperty('junit.jupiter.execution.parallel.config.strategy', 'fixed')
+            systemProperty('junit.jupiter.execution.parallel.config.fixed.parallelism', 4)
         }
     }
 

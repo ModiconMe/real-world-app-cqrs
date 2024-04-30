@@ -1,45 +1,40 @@
 package com.modiconme.realworld.it.registeruser;
 
-import com.modiconme.realworld.domain.common.UserEntity;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.modiconme.realworld.domain.registeruser.RegisterUserRequest;
-import com.modiconme.realworld.domain.registeruser.RegisterUserResponse;
-import com.modiconme.realworld.dto.UserDto;
-import com.modiconme.realworld.infrastructure.web.controller.RestResponse;
 import com.modiconme.realworld.it.base.SpringIntegrationTest;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.modiconme.realworld.it.base.TestDataGenerator.uniqEmail;
+import static com.modiconme.realworld.it.base.TestDataGenerator.uniqString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@AutoConfigureMockMvc
 @RequiredArgsConstructor
 class RegisterUserTest extends SpringIntegrationTest {
 
-    private final TestRestTemplate testRestTemplate;
+    final MockMvc mockMvc;
+    final ObjectMapper objectMapper;
 
     @Test
-    @Disabled("TestRestTemplate")
-    void success() {
-        var request = new HttpEntity<>(new RegisterUserRequest("user@mail.com", "username", "password"));
-        ResponseEntity<RestResponse<RegisterUserResponse>> response = testRestTemplate.exchange(
-                "/api/users", HttpMethod.POST, request, new ParameterizedTypeReference<>() {
-                });
+    void success() throws Exception {
+        var request = new RegisterUserRequest(uniqEmail(), uniqString(), "password");
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-
-        UserDto user = response.getBody().getData().user();
-        assertEquals("user@mail.com", user.email());
-        assertEquals("username", user.username());
-        assertNull(user.bio());
-        assertNull(user.image());
-
-        UserEntity userEntity = db.findById(UserEntity.class, 2L);
-        assertNotNull(userEntity);
+        mockMvc.perform(post("/api/users")
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.data.user.email").value(request.email()))
+                .andExpect(jsonPath("$.data.user.username").value(request.username()))
+                .andExpect(jsonPath("$.data.user.token").isNotEmpty())
+                .andExpect(jsonPath("$.data.user.bio").doesNotExist())
+                .andExpect(jsonPath("$.data.user.image").doesNotExist())
+                .andExpect(jsonPath("$.error").doesNotExist());
     }
 }

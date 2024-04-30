@@ -10,7 +10,9 @@ import org.javatuples.Triplet;
 import org.springframework.http.HttpStatus;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -100,6 +102,15 @@ public class Result<T> {
         }
     }
 
+    public Result<T> ensure(Predicate<T> predicate, Result<T> failure) {
+        Objects.requireNonNull(predicate);
+        if (isSuccess()) {
+            return predicate.test(data) ? this : failure;
+        } else {
+            return Result.failure(error);
+        }
+    }
+
     public <U> Result<U> flatMap(Function<? super T, ? extends Result<? extends U>> mapper) {
         Objects.requireNonNull(mapper);
         if (!isSuccess()) {
@@ -109,5 +120,19 @@ public class Result<T> {
             Result<U> r = (Result<U>) mapper.apply(data);
             return Objects.requireNonNull(r);
         }
+    }
+
+    public Result<T> onSuccess(Consumer<T> consumer) {
+        if (isSuccess()) {
+            consumer.accept(data);
+        }
+        return this;
+    }
+
+    public Result<T> onFailure(Consumer<T> consumer) {
+        if (isFailure()) {
+            consumer.accept(data);
+        }
+        return this;
     }
 }
