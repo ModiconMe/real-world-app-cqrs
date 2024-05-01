@@ -31,7 +31,7 @@ class GetProfileTest extends SpringIntegrationTest {
         UserEntity user2 = db.persisted(aUser(passwordEncoder).build());
         db.persisted(aFollowRelation().followee(user2).follower(user1).build());
 
-        String token = authenticator.authenticate(user1.getEmail(), "password", mockMvc);
+        String token = authenticator.authenticate(user1.getEmail(), "password").token();
         mockMvc.perform(post("/api/profiles/{profileUsername}", user2.getUsername())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, token))
@@ -48,7 +48,7 @@ class GetProfileTest extends SpringIntegrationTest {
         UserEntity user1 = db.persisted(aUser(passwordEncoder).build());
         UserEntity user2 = db.persisted(aUser(passwordEncoder).build());
 
-        String token = authenticator.authenticate(user1.getEmail(), "password", mockMvc);
+        String token = authenticator.authenticate(user1.getEmail(), "password").token();
         mockMvc.perform(post("/api/profiles/{profileUsername}", user2.getUsername())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header(HttpHeaders.AUTHORIZATION, token))

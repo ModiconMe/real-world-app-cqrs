@@ -1,44 +1,53 @@
 package com.modiconme.realworld.it.follow;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.modiconme.realworld.domain.common.PasswordEncoder;
 import com.modiconme.realworld.domain.common.UserEntity;
+import com.modiconme.realworld.domain.followprofile.FollowProfileResult;
+import com.modiconme.realworld.dto.ProfileDto;
+import com.modiconme.realworld.infrastructure.web.controller.RestResponse;
 import com.modiconme.realworld.it.base.SpringIntegrationTest;
+import com.modiconme.realworld.it.base.assertions.RestResponseAssertion;
+import com.modiconme.realworld.it.base.extension.Auth;
+import com.modiconme.realworld.it.base.extension.AuthExtension;
+import com.modiconme.realworld.it.base.extension.ContextHolderExtension;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static com.modiconme.realworld.it.base.builder.UserEntityTestBuilder.aUser;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@AutoConfigureMockMvc
+@ExtendWith({ContextHolderExtension.class, AuthExtension.class})
 @RequiredArgsConstructor
 class FollowUserTest extends SpringIntegrationTest {
 
-    final MockMvc mockMvc;
-    final ObjectMapper objectMapper;
     final PasswordEncoder passwordEncoder;
+    final TestRestTemplate testRestTemplate;
 
+    @Auth
     @Test
-    void success() throws Exception {
-        UserEntity user1 = db.persisted(aUser(passwordEncoder).build());
-        UserEntity user2 = db.persisted(aUser(passwordEncoder).build());
+    void success() {
+        UserEntity user = db.persisted(aUser(passwordEncoder).build());
 
-        String token = authenticator.authenticate(user1.getEmail(), "password", mockMvc);
-        mockMvc.perform(post("/api/profiles/follow/{profileUsername}", user2.getUsername())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .header(HttpHeaders.AUTHORIZATION, token))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("$.data.profile.username").value(user2.getUsername()))
-                .andExpect(jsonPath("$.data.profile.bio").doesNotExist())
-                .andExpect(jsonPath("$.data.profile.image").doesNotExist())
-                .andExpect(jsonPath("$.data.profile.following").isBoolean())
-                .andExpect(jsonPath("$.error").doesNotExist());
+        ResponseEntity<RestResponse<FollowProfileResult>> result = testRestTemplate.exchange(
+                "/api/profiles/follow/{profileUsername}",
+                HttpMethod.POST,
+                HttpEntity.EMPTY,
+                new ParameterizedTypeReference<>() {
+                }, user.getUsername());
+
+        var expectedData = new FollowProfileResult(
+                new ProfileDto(user.getUsername(), null, null, true));
+
+        RestResponseAssertion.assertThat(result)
+                .hasStatusCodeEquals(HttpStatus.OK)
+                .hasDataEquals(expectedData)
+                .hasErrorEquals(null);
     }
 
 }

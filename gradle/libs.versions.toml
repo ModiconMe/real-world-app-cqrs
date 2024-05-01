@@ -25,7 +25,8 @@ jwt-api = { module = 'io.jsonwebtoken:jjwt-api', version.ref = 'jjwt' }
 jwt-impl = { module = 'io.jsonwebtoken:jjwt-impl', version.ref = 'jjwt' }
 jwt-jackson = { module = 'io.jsonwebtoken:jjwt-jackson', version.ref = 'jjwt' }
 
-testcontainers = { module = 'org.testcontainers:postgresql', version.ref = 'testcontainers' }
+testcontainers-postgresql = { module = 'org.testcontainers:postgresql', version.ref = 'testcontainers' }
+testcontainers-junit = { module = 'org.testcontainers:junit-jupiter', version.ref = 'testcontainers' }
 faker = 'com.github.javafaker:javafaker:1.0.2'
 openfeign = { module = 'org.springframework.cloud:spring-cloud-starter-openfeign', version.ref = 'openfeign' }
 openfeign-jackson = { module = 'io.github.openfeign:feign-jackson', version.ref = 'openfeign-jackson' }

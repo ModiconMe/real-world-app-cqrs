@@ -24,13 +24,14 @@ dependencies {
 
     implementation 'org.javatuples:javatuples:1.2'
 
-    testImplementation libs.testcontainers
+    testImplementation libs.testcontainers.postgresql
+    testImplementation libs.testcontainers.junit
     testImplementation libs.spring.test
 //    testImplementation libs.openfeign
 //    testImplementation libs.openfeign.jackson
 
 //    iTestImplementation libs.faker
-    iTestImplementation libs.testcontainers
+    iTestImplementation libs.testcontainers.postgresql
     iTestImplementation libs.spring.test
 //    iTestImplementation libs.openfeign
 //    iTestImplementation libs.openfeign.jackson
