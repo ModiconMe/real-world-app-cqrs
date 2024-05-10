@@ -1,8 +1,8 @@
 package com.modiconme.realworld.it.base.builder;
 
-import com.modiconme.realworld.domain.common.Password;
 import com.modiconme.realworld.domain.common.PasswordEncoder;
-import com.modiconme.realworld.domain.common.UserEntity;
+import com.modiconme.realworld.domain.common.valueobjects.Password;
+import com.modiconme.realworld.infrastructure.repository.jpa.entity.UserEntity;
 
 import java.time.ZonedDateTime;
 

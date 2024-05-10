@@ -1,6 +1,5 @@
 package com.modiconme.realworld.infrastructure.security;
 
-import com.modiconme.realworld.domain.common.UserEntity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,10 +16,6 @@ public class AppUserDetails implements UserDetails {
     private final String email;
     private final String username;
     private final String password;
-
-    public static AppUserDetails fromUser(UserEntity user) {
-        return new AppUserDetails(user.getId(), user.getEmail(), user.getUsername(), user.getPassword());
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

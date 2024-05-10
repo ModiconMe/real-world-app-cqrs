@@ -1,9 +1,9 @@
 package com.modiconme.realworld.it.base.builder;
 
-import com.modiconme.realworld.domain.common.FollowRelation;
-import com.modiconme.realworld.domain.common.UserEntity;
+import com.modiconme.realworld.infrastructure.repository.jpa.entity.FollowRelationEntity;
+import com.modiconme.realworld.infrastructure.repository.jpa.entity.UserEntity;
 
-public class FollowRelationTestBuilder implements TestBuilder<FollowRelation> {
+public class FollowRelationTestBuilder implements TestBuilder<FollowRelationEntity> {
 
     private Long id;
     private UserEntity followee;
@@ -14,8 +14,8 @@ public class FollowRelationTestBuilder implements TestBuilder<FollowRelation> {
     }
 
     @Override
-    public FollowRelation build() {
-        return new FollowRelation(id, followee, follower);
+    public FollowRelationEntity build() {
+        return new FollowRelationEntity(id, followee, follower);
     }
 
     public Long getId() {

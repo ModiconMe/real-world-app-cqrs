@@ -4,9 +4,7 @@ import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.javatuples.Pair;
-import org.javatuples.Quartet;
-import org.javatuples.Triplet;
+import org.javatuples.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.Objects;
@@ -77,6 +75,34 @@ public class Result<T> {
         }
     }
 
+    public static <A, B, C, D, E> Result<Quintet<A, B, C, D, E>> zip(Result<A> a, Result<B> b, Result<C> c,
+                                                                     Result<D> d, Result<E> e) {
+        if (Stream.of(a, b, c, d).noneMatch(Result::isFailure)) {
+            Quintet<A, B, C, D, E> with = Quintet.with(a.data, b.data, c.data, d.data, e.data);
+            return success(with);
+        } else {
+            Result<?> result = Stream.of(a, b, c, d)
+                    .filter(Result::isFailure)
+                    .findFirst()
+                    .orElseThrow();
+            return failure(result.getError());
+        }
+    }
+
+    public static <A, B, C, D, E, F> Result<Sextet<A, B, C, D, E, F>> zip(Result<A> a, Result<B> b, Result<C> c,
+                                                                          Result<D> d, Result<E> e, Result<F> f) {
+        if (Stream.of(a, b, c, d, f).noneMatch(Result::isFailure)) {
+            Sextet<A, B, C, D, E, F> with = Sextet.with(a.data, b.data, c.data, d.data, e.data, f.data);
+            return success(with);
+        } else {
+            Result<?> result = Stream.of(a, b, c, d)
+                    .filter(Result::isFailure)
+                    .findFirst()
+                    .orElseThrow();
+            return failure(result.getError());
+        }
+    }
+
     public boolean isSuccess() {
         return data != null && error == null;
     }
@@ -129,10 +155,4 @@ public class Result<T> {
         return this;
     }
 
-    public Result<T> onFailure(Consumer<T> consumer) {
-        if (isFailure()) {
-            consumer.accept(data);
-        }
-        return this;
-    }
 }

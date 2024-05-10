@@ -9,6 +9,6 @@ public record CommentDto(
         Long id,
         ZonedDateTime createdAt,
         ZonedDateTime updatedAt,
-        String body,
-        ProfileDto author
+        String body/*,
+        ProfileDto author*/
 ) { }

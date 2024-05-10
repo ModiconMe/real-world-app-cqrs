@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
 
+@SuppressWarnings("UnusedReturnValue")
 public final class RestResponseAssertion<T> extends AbstractAssert<RestResponseAssertion<T>, ResponseEntity<RestResponse<T>>> {
 
     public RestResponseAssertion(ResponseEntity<RestResponse<T>> restResponseResponseEntity) {

@@ -1,7 +1,7 @@
 package com.modiconme.realworld.infrastructure.security;
 
 import com.modiconme.realworld.domain.common.Result;
-import com.modiconme.realworld.domain.common.UserRepository;
+import com.modiconme.realworld.domain.common.valueobjects.Username;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -11,15 +11,30 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class AuthenticationProvider {
 
-    private final UserRepository userRepository;
+    private final SecurityGateway securityGateway;
+
+    private static AppUserDetails mapToAppUserDetails(ExistedByUsernameUser it) {
+        return new AppUserDetails(
+                it.getUserId().getValue(),
+                it.getEmail().getValue(),
+                it.getUsername().getValue(),
+                it.getEncodedPassword().getValue()
+        );
+    }
+
+    private static UsernamePasswordAuthenticationToken mapToUsernamePasswordAuthenticationToken(
+            AppUserDetails it
+    ) {
+        return new UsernamePasswordAuthenticationToken(
+                it,
+                it.getPassword(),
+                it.getAuthorities());
+    }
 
     public Result<Authentication> getAuthentication(String username) {
-        return userRepository.findByUsername(username)
-                .map(AppUserDetails::fromUser)
-                .map(userDetails -> new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        userDetails.getPassword(),
-                        userDetails.getAuthorities())
-                );
+        return Username.emerge(username)
+                .flatMap(securityGateway::findByUsername)
+                .map(AuthenticationProvider::mapToAppUserDetails)
+                .map(AuthenticationProvider::mapToUsernamePasswordAuthenticationToken);
     }
 }

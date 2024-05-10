@@ -1,7 +1,8 @@
 package com.modiconme.realworld.infrastructure.security;
 
-import com.modiconme.realworld.domain.common.Password;
 import com.modiconme.realworld.domain.common.PasswordEncoder;
+import com.modiconme.realworld.domain.common.valueobjects.EncodedPassword;
+import com.modiconme.realworld.domain.common.valueobjects.Password;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
@@ -11,8 +12,8 @@ public class BCryptPasswordEncoder implements PasswordEncoder {
             new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder();
 
     @Override
-    public boolean matches(Password password, String hash) {
-        return passwordEncoder.matches(password.getValue(), hash);
+    public boolean matches(Password password, EncodedPassword hash) {
+        return passwordEncoder.matches(password.getValue(), hash.getValue());
     }
 
     @Override

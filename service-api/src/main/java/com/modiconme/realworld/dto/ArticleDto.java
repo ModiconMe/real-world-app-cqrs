@@ -15,7 +15,7 @@ public record ArticleDto(
         ZonedDateTime createdAt,
         ZonedDateTime updatedAt,
         Boolean favorited,
-        Long favoritesCount,
-        ProfileDto author
+        Long favoritesCount
+//        ProfileDto author
 ) { }
 

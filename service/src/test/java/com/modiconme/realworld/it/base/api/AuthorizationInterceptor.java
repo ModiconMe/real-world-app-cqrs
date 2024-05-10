@@ -1,9 +1,9 @@
 package com.modiconme.realworld.it.base.api;
 
-import com.modiconme.realworld.dto.UserDto;
 import com.modiconme.realworld.infrastructure.security.jwt.JwtConfig;
 import com.modiconme.realworld.it.base.extension.AuthExtension;
 import com.modiconme.realworld.it.base.extension.ContextHolderExtension;
+import com.modiconme.realworld.it.base.extension.TestUser;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
@@ -24,8 +24,8 @@ public class AuthorizationInterceptor implements ClientHttpRequestInterceptor {
     @Override
     public @NotNull ClientHttpResponse intercept(@NotNull HttpRequest request, byte @NotNull [] body,
                                                  @NotNull ClientHttpRequestExecution execution) throws IOException {
-        UserDto user = AuthExtension.getUser(ContextHolderExtension.Holder.INSTANCE.get());
-        if (user != null) {
+        TestUser user = AuthExtension.getUser(ContextHolderExtension.Holder.INSTANCE.get());
+        if (user != null && !request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
             request.getHeaders().add(HttpHeaders.AUTHORIZATION, jwtConfig.getTokenPrefix() + " " + user.token());
         }
         return execution.execute(request, body);

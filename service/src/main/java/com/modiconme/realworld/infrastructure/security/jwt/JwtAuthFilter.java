@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.Date;
 
+// TODO exclude filter from unauthorized endpoints
 @Slf4j
 @Component
 @RequiredArgsConstructor

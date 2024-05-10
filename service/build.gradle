@@ -23,6 +23,7 @@ dependencies {
     implementation libs.openApi
 
     implementation 'org.javatuples:javatuples:1.2'
+    implementation 'io.vavr:vavr:0.10.4'
 
     testImplementation libs.testcontainers.postgresql
     testImplementation libs.testcontainers.junit

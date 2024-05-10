@@ -1,9 +1,9 @@
 spring:
   datasource:
-    username: test
-    password: test
+    username: ${CONTAINER.USERNAME}
+    password: ${CONTAINER.PASSWORD}
+    url: ${CONTAINER.URL}
   jpa:
-
     properties:
       hibernate:
         show_sql: true
