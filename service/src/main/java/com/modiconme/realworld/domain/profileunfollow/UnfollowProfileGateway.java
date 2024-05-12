@@ -5,10 +5,15 @@ import com.modiconme.realworld.domain.common.valueobjects.FollowRelationId;
 import com.modiconme.realworld.domain.common.valueobjects.UserId;
 import com.modiconme.realworld.domain.common.valueobjects.Username;
 import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
+import io.vavr.control.Try;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.unprocessableEntity;
+
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 class UnfollowProfileGateway {
@@ -32,13 +37,17 @@ class UnfollowProfileGateway {
                         profileUsername.getValue())));
     }
 
-    // TODO replace with native cause select before delete
     Result<FollowRelationId> unfollowById(FollowRelationId followRelationId) {
-        try {
-            unfollowProfileRepository.deleteById(followRelationId.getValue());
-            return Result.success(followRelationId);
-        } catch (Exception e) {
-            return Result.failure(e);
+        Try<Void> unfollowResult = Try.run(
+                () -> unfollowProfileRepository.unfollow(followRelationId.getValue())
+        );
+
+        if (unfollowResult.isFailure()) {
+            log.error("Deleting follow relation with id {} failed with error: ",
+                    followRelationId.getValue(), unfollowResult.getCause());
+            return Result.failure(unprocessableEntity("Error occurred while unfollowing profile"));
         }
+
+        return Result.success(followRelationId);
     }
 }

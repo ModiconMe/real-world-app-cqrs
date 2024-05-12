@@ -3,7 +3,9 @@ package com.modiconme.realworld.domain.common.valueobjects;
 import com.modiconme.realworld.domain.common.Result;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.NullSource;
 
 import java.util.stream.Stream;
 
@@ -22,6 +24,8 @@ class EmailTest {
 
     @ParameterizedTest
     @MethodSource
+    @NullSource
+    @EmptySource
     void failure(String email) {
         Result<Email> result = Email.emerge(email);
 

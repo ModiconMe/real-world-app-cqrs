@@ -1,14 +1,17 @@
 package com.modiconme.realworld.domain.common.valueobjects;
 
 import com.modiconme.realworld.domain.common.Result;
-import io.vavr.control.Try;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.util.StringUtils;
 
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter
+@ToString
+@EqualsAndHashCode
 @RequiredArgsConstructor(access = PRIVATE)
 public final class Username implements ValueObject<String> {
 
@@ -20,14 +23,6 @@ public final class Username implements ValueObject<String> {
         }
 
         return Result.success(new Username(value));
-    }
-
-    public static Try<Username> emergeTry(String value) {
-        if (isInvalidUsername(value)) {
-            return Try.failure(new IllegalArgumentException("Invalid username: '%s'".formatted(value)));
-        }
-
-        return Try.success(new Username(value));
     }
 
     private static final int USERNAME_MAX_LENGTH = 64;

@@ -8,13 +8,11 @@ import com.modiconme.realworld.domain.common.valueobjects.Password;
 import com.modiconme.realworld.domain.common.valueobjects.Username;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.javatuples.Triplet;
 
 import static lombok.AccessLevel.PRIVATE;
 
 @Getter
-@Slf4j
 @RequiredArgsConstructor(access = PRIVATE)
 final class ValidatedRegisterUserRequest {
     private final Email email;

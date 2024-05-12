@@ -1,8 +1,10 @@
 package com.modiconme.realworld.domain.profileunfollow;
 
 import com.modiconme.realworld.infrastructure.repository.jpa.entity.FollowRelationEntity;
+import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -22,4 +24,12 @@ interface UnfollowProfileRepository extends JpaRepository<FollowRelationEntity, 
             """, nativeQuery = true)
     Optional<Tuple> findFollowedProfile(@Param("followedBy") long followedBy,
                                         @Param("profileUsername") String profileUsername);
+
+    @Modifying
+    @Query(value = """
+            DELETE
+              FROM follow_relation
+             WHERE id = :id
+            """, nativeQuery = true)
+    void unfollow(@Param("id") long id) throws PersistenceException;
 }

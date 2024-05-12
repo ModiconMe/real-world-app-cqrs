@@ -3,10 +3,15 @@ package com.modiconme.realworld.domain.profilefollow;
 import com.modiconme.realworld.domain.common.Result;
 import com.modiconme.realworld.domain.common.valueobjects.*;
 import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
+import io.vavr.control.Try;
 import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import static com.modiconme.realworld.infrastructure.utils.exception.ApiException.unprocessableEntity;
+
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 class FollowProfileGateway {
@@ -31,9 +36,18 @@ class FollowProfileGateway {
     }
 
     Result<FollowRelationId> follow(FollowerId followerId, FolloweeId followeeId) {
-        long id = followProfileRepository.upsert(followerId.getValue(), followeeId.getValue());
-        return id != 0
-                ? FollowRelationId.emerge(id)
-                : Result.failure(ApiException.unprocessableEntity("User already following this profile"));
+        Try<Long> followResult = Try.of(
+                () -> followProfileRepository.upsert(followerId.getValue(), followeeId.getValue())
+        );
+
+        if (followResult.isFailure()) {
+            log.error("Following profile {} by user {} failed with error: ",
+                    followeeId.getValue(), followerId.getValue(), followResult.getCause());
+            return Result.failure(unprocessableEntity("Error occurred while following profile"));
+        }
+
+        return followResult.get() != 0
+                ? FollowRelationId.emerge(followResult.get())
+                : Result.failure(ApiException.unprocessableEntity("Oops! Profile was not followed"));
     }
 }

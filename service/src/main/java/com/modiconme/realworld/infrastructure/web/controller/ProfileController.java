@@ -29,37 +29,30 @@ public class ProfileController {
     public ResponseEntity<RestResponse<GetProfileResult>> getProfile(
             @PathVariable String profileUsername, @AuthenticationPrincipal AppUserDetails user
     ) {
-        Result<GetProfileResult> getProfileResult = getProfileService.getProfileByUsername(
+        Result<GetProfileResult> result = getProfileService.getProfileByUsername(
                 new GetProfileRequest(user.getUserId(), profileUsername)
         );
-        RestResponse<GetProfileResult> restResponse = RestResponse.of(getProfileResult);
-        return getProfileResult.isSuccess()
-                ? ResponseEntity.ok(restResponse)
-                : ResponseEntity.status(getProfileResult.getStatus()).body(restResponse);
+        return result.toRestResponse();
     }
 
     @PostMapping("/follow/{profileUsername}")
     public ResponseEntity<RestResponse<FollowProfileResult>> followProfile(
             @PathVariable String profileUsername, @AuthenticationPrincipal AppUserDetails user
     ) {
-        Result<FollowProfileResult> followProfileResult = followProfileService.followProfile(
-                new FollowProfileRequest(user.getUserId(), profileUsername));
-        RestResponse<FollowProfileResult> restResponse = RestResponse.of(followProfileResult);
-        return followProfileResult.isSuccess()
-                ? ResponseEntity.ok(restResponse)
-                : ResponseEntity.status(followProfileResult.getStatus()).body(restResponse);
+        Result<FollowProfileResult> result = followProfileService.followProfile(
+                new FollowProfileRequest(user.getUserId(), profileUsername)
+        );
+        return result.toRestResponse();
     }
 
     @DeleteMapping("/follow/{profileUsername}")
     public ResponseEntity<RestResponse<UnfollowProfileResult>> unfollowProfile(
             @PathVariable String profileUsername, @AuthenticationPrincipal AppUserDetails user
     ) {
-        Result<UnfollowProfileResult> unfollowProfileResult = unfollowProfileService.unfollowProfile(
-                new UnfollowProfileRequest(user.getUserId(), profileUsername));
-        RestResponse<UnfollowProfileResult> restResponse = RestResponse.of(unfollowProfileResult);
-        return unfollowProfileResult.isSuccess()
-                ? ResponseEntity.ok(restResponse)
-                : ResponseEntity.status(unfollowProfileResult.getStatus()).body(restResponse);
+        Result<UnfollowProfileResult> result = unfollowProfileService.unfollowProfile(
+                new UnfollowProfileRequest(user.getUserId(), profileUsername)
+        );
+        return result.toRestResponse();
     }
 
 }

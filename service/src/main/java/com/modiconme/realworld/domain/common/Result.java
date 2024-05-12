@@ -1,11 +1,13 @@
 package com.modiconme.realworld.domain.common;
 
 import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
+import com.modiconme.realworld.infrastructure.web.controller.RestResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.javatuples.*;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -153,6 +155,13 @@ public class Result<T> {
             consumer.accept(data);
         }
         return this;
+    }
+
+    public ResponseEntity<RestResponse<T>> toRestResponse() {
+        RestResponse<T> restResponse = RestResponse.of(this);
+        return this.isSuccess()
+                ? ResponseEntity.ok(restResponse)
+                : ResponseEntity.status(getStatus()).body(restResponse);
     }
 
 }
