@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -50,7 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     public void checkToken(HttpServletRequest request) {
-        Result<Authentication> authResult = getHeader(request)
+        getHeader(request)
                 .ensure(this::isTokenStartsWithPrefix,
                         Result.failure(ApiException.unauthorized("Token has wrong prefix")))
                 .map(this::extractToken)
@@ -59,14 +58,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         Result.failure(ApiException.unauthorized("Token is expired: [token='{}']")))
                 .map(Claims::getSubject)
                 .flatMap(authenticationProvider::getAuthentication)
-                .onSuccess(it -> SecurityContextHolder.getContext().setAuthentication(it));
-
-        if (authResult.isSuccess()) {
-            log.info("Auth success: [authentication='{}']", authResult.getData());
-            return;
-        }
-
-        log.info("Auth failure:", authResult.getError());
+                .onSuccess(it -> SecurityContextHolder.getContext().setAuthentication(it))
+                .onBoth(it -> log.info("Auth success: [authentication='{}']", it),
+                        t -> log.error("Authentication failure: ", t));
     }
 
     private boolean isTokenStartsWithPrefix(String it) {

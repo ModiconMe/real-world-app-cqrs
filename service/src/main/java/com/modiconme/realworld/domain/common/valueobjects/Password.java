@@ -2,6 +2,7 @@ package com.modiconme.realworld.domain.common.valueobjects;
 
 import com.modiconme.realworld.domain.common.PasswordEncoder;
 import com.modiconme.realworld.domain.common.Result;
+import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -16,7 +17,7 @@ public final class Password implements ValueObject<String> {
 
     public static Result<Password> emerge(String value) {
         if (isInvalid(value)) {
-            return Result.failure(new IllegalArgumentException("Invalid password: '%s'".formatted(value)));
+            return Result.failure(ApiException.unprocessableEntity("Invalid password: '%s'".formatted(value)));
         }
 
         return Result.success(new Password(value));

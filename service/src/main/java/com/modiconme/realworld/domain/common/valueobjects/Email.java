@@ -1,6 +1,7 @@
 package com.modiconme.realworld.domain.common.valueobjects;
 
 import com.modiconme.realworld.domain.common.Result;
+import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import io.vavr.control.Try;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,7 +22,7 @@ public final class Email implements ValueObject<String> {
 
     public static Result<Email> emerge(String value) {
         if (isInvalidEmail(value)) {
-            return Result.failure(new IllegalArgumentException("Invalid email: '%s'".formatted(value)));
+            return Result.failure(ApiException.unprocessableEntity("Invalid email: '%s'".formatted(value)));
         }
 
         return Result.success(new Email(value));

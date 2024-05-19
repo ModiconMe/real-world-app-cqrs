@@ -16,8 +16,9 @@ public final class RestResponse<T> {
     private final String error;
 
     public static <T> RestResponse<T> of(Result<T> result) {
-        return result.isSuccess()
-                ? new RestResponse<>(result.getData(), null)
-                : new RestResponse<>(null, result.getError().getMessage());
+        return result.mapBoth(
+                it -> new RestResponse<>(it, null),
+                it -> new RestResponse<>(null, it.getMessage())
+        );
     }
 }

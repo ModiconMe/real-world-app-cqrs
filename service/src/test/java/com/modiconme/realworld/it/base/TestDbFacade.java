@@ -1,5 +1,8 @@
 package com.modiconme.realworld.it.base;
 
+import com.modiconme.realworld.it.base.repository.ArticleTagTestRepository;
+import com.modiconme.realworld.it.base.repository.ArticleTestRepository;
+import com.modiconme.realworld.it.base.repository.TagTestRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,10 @@ public class TestDbFacade {
 
     private final TestEntityManager testEntityManager;
     private final TransactionTemplate transactionTemplate;
+
+    public final ArticleTestRepository articles;
+    public final ArticleTagTestRepository articleTags;
+    public final TagTestRepository tags;
 
     public <T> T findById(Class<T> clazz, Long id) {
         return transactionTemplate.execute(status -> testEntityManager.find(clazz, id));

@@ -35,4 +35,8 @@ public class ApiException extends RuntimeException {
         return exception(HttpStatus.UNPROCESSABLE_ENTITY, message, args);
     }
 
+    public static ApiException internalError(String message, Object... args) {
+        return exception(HttpStatus.INTERNAL_SERVER_ERROR, message, args);
+    }
+
 }

@@ -13,6 +13,7 @@ dependencies {
     implementation libs.spring.web
     implementation libs.spring.validation
     implementation libs.spring.jpa
+    implementation libs.spring.jdbc
     implementation libs.spring.security
 
     implementation libs.jwt.api
@@ -28,13 +29,4 @@ dependencies {
     testImplementation libs.testcontainers.postgresql
     testImplementation libs.testcontainers.junit
     testImplementation libs.spring.test
-//    testImplementation libs.openfeign
-//    testImplementation libs.openfeign.jackson
-
-//    iTestImplementation libs.faker
-    iTestImplementation libs.testcontainers.postgresql
-    iTestImplementation libs.spring.test
-//    iTestImplementation libs.openfeign
-//    iTestImplementation libs.openfeign.jackson
 }
-

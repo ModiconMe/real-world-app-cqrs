@@ -5,6 +5,7 @@ import com.modiconme.realworld.domain.common.Result;
 import com.modiconme.realworld.domain.common.valueobjects.EncodedPassword;
 import com.modiconme.realworld.domain.common.valueobjects.Password;
 import com.modiconme.realworld.domain.common.valueobjects.ValueObject;
+import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 
@@ -24,7 +25,7 @@ final class NewPassword implements ValueObject<Optional<String>> {
         }
 
         if (isInvalid(value)) {
-            return Result.failure(new IllegalArgumentException("Invalid password: '%s'".formatted(value)));
+            return Result.failure(ApiException.unprocessableEntity("Invalid password: '%s'".formatted(value)));
         }
 
         return Result.success(new NewPassword(value));

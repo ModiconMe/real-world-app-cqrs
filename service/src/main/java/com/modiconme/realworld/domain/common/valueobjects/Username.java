@@ -1,6 +1,7 @@
 package com.modiconme.realworld.domain.common.valueobjects;
 
 import com.modiconme.realworld.domain.common.Result;
+import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public final class Username implements ValueObject<String> {
 
     public static Result<Username> emerge(String value) {
         if (isInvalidUsername(value)) {
-            return Result.failure(new IllegalArgumentException("Invalid username: '%s'".formatted(value)));
+            return Result.failure(ApiException.unprocessableEntity("Invalid username: '%s'".formatted(value)));
         }
 
         return Result.success(new Username(value));

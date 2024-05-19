@@ -1,5 +1,5 @@
 [versions]
-spring-boot = '3.0.1'
+spring-boot = '3.2.1'
 spring-dependency-management = '1.1.0'
 openApi = '2.1.0'
 java = '17'
@@ -14,6 +14,8 @@ groovy = '4.0.9'
 spring-web = { module = 'org.springframework.boot:spring-boot-starter-web' }
 spring-validation = { module = 'org.springframework.boot:spring-boot-starter-validation' }
 spring-jpa = { module = 'org.springframework.boot:spring-boot-starter-data-jpa' }
+spring-jdbc = { module = 'org.springframework.boot:spring-boot-starter-jdbc' }
+spring-jooq = { module = 'org.springframework.boot:spring-boot-starter-jooq' }
 spring-security = { module = 'org.springframework.boot:spring-boot-starter-security' }
 spring-test = { module = 'org.springframework.boot:spring-boot-starter-test' }
 oauth2-resource-server = { module = 'org.springframework.boot:spring-boot-starter-oauth2-resource-server' }

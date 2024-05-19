@@ -3,7 +3,6 @@ package com.modiconme.realworld.command;
 import com.modiconme.realworld.cqrs.Command;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.With;
 
 @AllArgsConstructor
 @Getter

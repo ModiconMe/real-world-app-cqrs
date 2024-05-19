@@ -3,6 +3,7 @@ package com.modiconme.realworld.domain.userupdate;
 import com.modiconme.realworld.domain.common.Result;
 import com.modiconme.realworld.domain.common.valueobjects.Username;
 import com.modiconme.realworld.domain.common.valueobjects.ValueObject;
+import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
 
@@ -22,7 +23,7 @@ final class NewUsername implements ValueObject<Optional<String>> {
         }
 
         if (isInvalidUsername(value)) {
-            return Result.failure(new IllegalArgumentException("Invalid username: '%s'".formatted(value)));
+            return Result.failure(ApiException.unprocessableEntity("Invalid username: '%s'".formatted(value)));
         }
 
         return Result.success(new NewUsername(value));

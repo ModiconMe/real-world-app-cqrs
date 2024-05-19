@@ -3,6 +3,7 @@ package com.modiconme.realworld.domain.userupdate;
 import com.modiconme.realworld.domain.common.Result;
 import com.modiconme.realworld.domain.common.valueobjects.Email;
 import com.modiconme.realworld.domain.common.valueobjects.ValueObject;
+import com.modiconme.realworld.infrastructure.utils.exception.ApiException;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -26,7 +27,7 @@ final class NewEmail implements ValueObject<Optional<String>> {
         }
 
         if (isInvalidEmail(value)) {
-            return Result.failure(new IllegalArgumentException("Invalid email: '%s'".formatted(value)));
+            return Result.failure(ApiException.unprocessableEntity("Invalid email: '%s'".formatted(value)));
         }
 
         return Result.success(new NewEmail(value));
