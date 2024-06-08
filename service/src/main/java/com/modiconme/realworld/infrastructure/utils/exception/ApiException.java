@@ -15,8 +15,17 @@ public class ApiException extends RuntimeException {
         this.status = status;
     }
 
+    public ApiException(String message, Throwable cause, HttpStatus status) {
+        super(message, cause);
+        this.status = status;
+    }
+
     public static ApiException exception(HttpStatus status, String message, Object... args) {
         return new ApiException(status, format(message, args));
+    }
+
+    public static ApiException exception(HttpStatus status, String message, Throwable cause, Object... args) {
+        return new ApiException(format(message, args), cause, status);
     }
 
     public static ApiException notFound(String message, Object... args) {
@@ -35,8 +44,8 @@ public class ApiException extends RuntimeException {
         return exception(HttpStatus.UNPROCESSABLE_ENTITY, message, args);
     }
 
-    public static ApiException internalError(String message, Object... args) {
-        return exception(HttpStatus.INTERNAL_SERVER_ERROR, message, args);
+    public static ApiException internalError(String message, Throwable cause, Object... args) {
+        return exception(HttpStatus.INTERNAL_SERVER_ERROR, message, cause, args);
     }
 
 }

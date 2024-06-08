@@ -13,11 +13,11 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @RequiredArgsConstructor(access = PRIVATE)
-final class TagList implements ValueObject<List<String>> {
+public final class TagList implements ValueObject<List<String>> {
 
     private final List<String> value;
 
-    static Result<TagList> emerge(List<String> value) {
+    public static Result<TagList> emerge(List<String> value) {
         if (value == null) {
             return Result.failure(ApiException.unprocessableEntity("Invalid tag list"));
         }

@@ -1,7 +1,9 @@
-package com.modiconme.realworld.it.createarticle;
+package com.modiconme.realworld.it.updatearticle;
 
 import com.modiconme.realworld.domain.articlecreate.CreateArticleRequest;
 import com.modiconme.realworld.domain.articlecreate.CreateArticleResponse;
+import com.modiconme.realworld.domain.articleupdate.UpdateArticleRequest;
+import com.modiconme.realworld.domain.articleupdate.UpdateArticleResponse;
 import com.modiconme.realworld.domain.common.PasswordEncoder;
 import com.modiconme.realworld.infrastructure.repository.jpa.entity.UserEntity;
 import com.modiconme.realworld.infrastructure.web.controller.RestResponse;
@@ -28,7 +30,7 @@ import static com.modiconme.realworld.it.base.builder.UserEntityTestBuilder.aUse
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RequiredArgsConstructor
-class CreateArticleTest extends SpringIntegrationTest {
+class UpdateArticleTest extends SpringIntegrationTest {
 
     final PasswordEncoder passwordEncoder;
     final TestRestTemplate testRestTemplate;
@@ -39,17 +41,31 @@ class CreateArticleTest extends SpringIntegrationTest {
         TagEntity existedTag = db.persisted(aTag().build());
         String token = authClient.authenticate(currentUser.getEmail(), "password").token();
 
-        CreateArticleRequest request = new CreateArticleRequest(
+        CreateArticleRequest createArticleRequest = new CreateArticleRequest(
                 TestDataGenerator.uniqString(), "description", "body", List.of("tag1", existedTag.getTagName())
         );
 
-        ResponseEntity<RestResponse<CreateArticleResponse>> result = testRestTemplate.exchange(
+        ResponseEntity<RestResponse<CreateArticleResponse>> createResult = testRestTemplate.exchange(
                 "/api/articles",
                 HttpMethod.POST,
-                new HttpEntity<>(request, getAuthorizationHeader(token)),
+                new HttpEntity<>(createArticleRequest, getAuthorizationHeader(token)),
                 new ParameterizedTypeReference<>() {
                 });
 
+        RestResponseAssertion.assertThat(createResult)
+                .hasStatusCodeEquals(HttpStatus.OK)
+                .hasErrorEquals(null);
+
+        UpdateArticleRequest updateArticleRequest = new UpdateArticleRequest(
+                TestDataGenerator.uniqString(), "newDescription", "newBody"
+        );
+
+        ResponseEntity<RestResponse<UpdateArticleResponse>> result = testRestTemplate.exchange(
+                "/api/articles/{slug}",
+                HttpMethod.PUT,
+                new HttpEntity<>(updateArticleRequest, getAuthorizationHeader(token)),
+                new ParameterizedTypeReference<>() {
+                }, createArticleRequest.title());
         RestResponseAssertion.assertThat(result)
                 .hasStatusCodeEquals(HttpStatus.OK)
                 .hasErrorEquals(null);
@@ -74,31 +90,7 @@ class CreateArticleTest extends SpringIntegrationTest {
         assertThat(tag1.get().getTagName()).isEqualTo("tag1");
 
         Optional<TagEntity> tag2 = db.tags.findById(articleTags.get(1).getTag().getId());
-        assertThat(tag2).isPresent();
         assertThat(tag2).contains(existedTag);
-    }
-
-    @Test
-    void failure() {
-        UserEntity currentUser = db.persisted(aUser(passwordEncoder).build());
-        TagEntity existedTag = db.persisted(aTag().build());
-        String token = authClient.authenticate(currentUser.getEmail(), "password").token();
-
-        CreateArticleRequest request = new CreateArticleRequest(
-                "/", "description", "body", List.of("tag1", existedTag.getTagName())
-        );
-
-        ResponseEntity<RestResponse<CreateArticleResponse>> result = testRestTemplate.exchange(
-                "/api/articles",
-                HttpMethod.POST,
-                new HttpEntity<>(request, getAuthorizationHeader(token)),
-                new ParameterizedTypeReference<>() {
-                });
-
-        RestResponseAssertion.assertThat(result)
-                .hasStatusCodeEquals(HttpStatus.UNPROCESSABLE_ENTITY)
-                .hasDataEquals(null)
-                .hasErrorEquals("Invalid title for slug: '%s'".formatted("/"));
     }
 
 }

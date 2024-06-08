@@ -11,11 +11,11 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @RequiredArgsConstructor(access = PRIVATE)
-final class Description implements ValueObject<String> {
+public final class Description implements ValueObject<String> {
 
     private final String value;
 
-    static Result<Description> emerge(String value) {
+    public static Result<Description> emerge(String value) {
         if (isValid(value)) {
             return Result.failure(ApiException.unprocessableEntity("Invalid description: '%s'".formatted(value)));
         }

@@ -25,6 +25,8 @@ dependencies {
 
     implementation 'org.javatuples:javatuples:1.2'
     implementation 'io.vavr:vavr:0.10.4'
+//    implementation("com.github.gavlyukovskiy:flexy-pool-spring-boot-starter:1.9.1")
+//    implementation 'com.vladmihalcea.flexy-pool:flexy-pool-core-java9:2.2.3'
 
     testImplementation libs.testcontainers.postgresql
     testImplementation libs.testcontainers.junit

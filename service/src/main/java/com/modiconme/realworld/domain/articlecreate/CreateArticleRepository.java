@@ -9,8 +9,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Optional;
 
 @Repository
@@ -19,8 +18,8 @@ class CreateArticleRepository {
 
     private static final RowMapper<SavedArticle> SAVED_ARTICLE_ROW_MAPPER = (rs, rowNum) -> new SavedArticle(
             rs.getLong("id"),
-            ZonedDateTime.ofInstant(rs.getTimestamp("created_at").toInstant(), ZoneId.systemDefault()),
-            ZonedDateTime.ofInstant(rs.getTimestamp("updated_at").toInstant(), ZoneId.systemDefault())
+            rs.getTimestamp("created_at").toInstant(),
+            rs.getTimestamp("updated_at").toInstant()
     );
 
     private static final RowMapper<AuthorDto> AUTHOR_DTO_ROW_MAPPER = (rs, rowNum) -> new AuthorDto(
@@ -90,7 +89,7 @@ class CreateArticleRepository {
                 .optional();
     }
 
-    record SavedArticle(long id, ZonedDateTime createdAt, ZonedDateTime updatedAt) {
+    record SavedArticle(long id, Instant createdAt, Instant updatedAt) {
     }
 
 }

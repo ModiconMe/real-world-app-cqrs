@@ -37,16 +37,15 @@ public class Result<T> {
         if (error instanceof ApiException apiException) {
             return new Result<>(null, error, apiException.getStatus(), false);
         }
-        return new Result<>(null, ApiException.internalError("Извините, мы не смогли обработать ваш запрос"),
+        return new Result<>(null, ApiException.internalError("Извините, мы не смогли обработать ваш запрос", error),
                 HttpStatus.UNPROCESSABLE_ENTITY, false);
     }
 
-    public static <T> Result<T> runCatching(Supplier<T> supplier, Consumer<Throwable> onErrorAction) {
+    public static <T> Result<T> runCatching(Supplier<T> supplier) {
         Objects.requireNonNull(supplier);
         try {
             return Result.success(supplier.get());
         } catch (Throwable e) {
-            onErrorAction.accept(e);
             return Result.failure(e);
         }
     }
@@ -226,14 +225,13 @@ public class Result<T> {
         return this;
     }
 
-    public Result<T> tryOnSuccess(Consumer<? super T> action, Consumer<Throwable> onErrorAction) {
+    public Result<T> tryTo(Consumer<? super T> action) {
         Objects.requireNonNull(action);
         if (isSuccess()) {
             try {
                 action.accept(data);
                 return Result.success(data);
             } catch (Throwable e) {
-                onErrorAction.accept(e);
                 return Result.failure(e);
             }
         } else {

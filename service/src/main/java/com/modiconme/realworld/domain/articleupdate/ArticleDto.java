@@ -1,4 +1,6 @@
-package com.modiconme.realworld.domain.articlecreate;
+package com.modiconme.realworld.domain.articleupdate;
+
+import com.modiconme.realworld.domain.articlecreate.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,13 +23,17 @@ public record ArticleDto(
             Slug slug,
             Description description,
             Body body,
-            TagList tagList,
+            List<String> tagList,
             Instant createdAt,
             Instant updatedAt,
+            ArticleFavouriteByUser favouriteByUser,
+            ArticleFavouriteCount articleFavouriteCount,
             AuthorDto author
     ) {
-        this(slug.getValue(), title.getValue(), description.getValue(), body.getValue(), tagList.getValue(),
-                createdAt, updatedAt, false, 0, author);
+        this(slug.getValue(), title.getValue(), description.getValue(), body.getValue(), tagList,
+                createdAt, updatedAt, favouriteByUser.getValue(), articleFavouriteCount.getValue(),
+                author);
     }
+
 }
 

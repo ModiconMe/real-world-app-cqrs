@@ -33,10 +33,7 @@ class FollowProfileGateway {
     }
 
     Result<FollowRelationId> follow(FollowerId followerId, FolloweeId followeeId) {
-        return Result.runCatching(
-                        () -> repository.upsert(followerId.getValue(), followeeId.getValue()),
-                        t -> log.error("Error occurred while save following relation: ", t)
-                )
+        return Result.runCatching(() -> repository.upsert(followerId.getValue(), followeeId.getValue()))
                 .onFailure(t -> log.error("Following profile {} by user {} failed with error: ",
                         followeeId.getValue(), followerId.getValue(), t))
                 .flatMap(FollowRelationId::emerge);

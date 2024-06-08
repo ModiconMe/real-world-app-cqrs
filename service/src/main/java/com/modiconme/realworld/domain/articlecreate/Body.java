@@ -11,11 +11,11 @@ import static lombok.AccessLevel.PRIVATE;
 
 @Getter
 @RequiredArgsConstructor(access = PRIVATE)
-final class Body implements ValueObject<String> {
+public final class Body implements ValueObject<String> {
 
     private final String value;
 
-    static Result<Body> emerge(String value) {
+    public static Result<Body> emerge(String value) {
         if (isValid(value)) {
             return Result.failure(ApiException.unprocessableEntity("Invalid body: '%s'".formatted(value)));
         }

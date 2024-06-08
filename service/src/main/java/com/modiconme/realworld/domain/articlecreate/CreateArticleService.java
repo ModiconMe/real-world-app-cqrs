@@ -3,6 +3,7 @@ package com.modiconme.realworld.domain.articlecreate;
 import com.modiconme.realworld.domain.common.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -10,6 +11,7 @@ public class CreateArticleService {
 
     private final CreateArticleGateway createArticleGateway;
 
+    @Transactional
     public Result<CreateArticleResponse> createArticle(CreateArticleRequest request, long userId) {
         return ValidatedCreateArticleRequest.emerge(request, userId)
                 .flatMap(createArticleGateway::createArticleAndTags)

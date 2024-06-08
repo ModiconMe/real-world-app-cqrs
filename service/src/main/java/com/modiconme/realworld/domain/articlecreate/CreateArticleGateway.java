@@ -16,20 +16,15 @@ class CreateArticleGateway {
     private final CreateArticleRepository repository;
 
     Result<CreatedArticle> createArticleAndTags(ValidatedCreateArticleRequest request) {
-        return Result.runCatching(
-                        () -> repository.saveArticle(
+        return Result.runCatching(() -> repository.saveArticle(
                                 request.getTitle(),
                                 request.getSlug(),
                                 request.getDescription(),
                                 request.getBody(),
-                                request.getUserId()),
-                        t -> log.error("Error occurred while save article: ", t)
-                )
+                        request.getUserId()))
                 .flatMap(it -> CreatedArticle.emerge(it.id(), it.createdAt(), it.updatedAt(), request))
-                .tryOnSuccess(
-                        it -> repository.saveTags(it.getArticleId(), it.getRequest().getTagList()),
-                        t -> log.error("Error occurred while creating article tags: ", t)
-                );
+                .tryTo(it -> repository.saveTags(it.getArticleId(), it.getRequest().getTagList()))
+                .onFailure(t -> log.error("Error occurred while creating article tags: ", t));
     }
 
     Result<AuthorDto> findProfile(UserId authorId) {

@@ -5,7 +5,7 @@ import com.modiconme.realworld.domain.common.valueobjects.ArticleId;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -14,13 +14,13 @@ import static lombok.AccessLevel.PRIVATE;
 final class CreatedArticle {
 
     private final ArticleId articleId;
-    private final ZonedDateTime createdAt;
-    private final ZonedDateTime updatedAt;
+    private final Instant createdAt;
+    private final Instant updatedAt;
     private final ValidatedCreateArticleRequest request;
 
     static Result<CreatedArticle> emerge(long articleId,
-                                         ZonedDateTime createdAt,
-                                         ZonedDateTime updatedAt,
+                                         Instant createdAt,
+                                         Instant updatedAt,
                                          ValidatedCreateArticleRequest request) {
         return wrapPrimitivesToValueObjects(articleId)
                 .map(it -> new CreatedArticle(it, createdAt, updatedAt, request));
